@@ -1,5 +1,8 @@
 ownCloud application to integrate Collabora Online
 ==================================================
+
+Modified by BW-Tech GmbH for owncloud.online and PHP 8.4 compatibility.
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)

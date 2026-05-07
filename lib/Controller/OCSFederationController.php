@@ -4,6 +4,7 @@
  * @author Szymon Kłos <szymon.klos@collabora.com>
  *
  * @copyright Copyright (c) 2023, ownCloud GmbH
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -68,7 +69,7 @@ class OCSFederationController extends OCSController {
 		$row = new Wopi();
 		$wopi = $row->getWopiForToken($token);
 
-		if ($wopi == false) {
+		if ($wopi === null) {
 			return new DataResponse([], Http::STATUS_NOT_FOUND);
 		}
 

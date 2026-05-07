@@ -1,15 +1,19 @@
 {
-  "name": "owncloud/richdocuments",
+  "name": "bwtech/richdocuments",
+  "description": "Collabora Online integration for owncloud.online, modified by BW-Tech GmbH for PHP 8.4 compatibility.",
+  "homepage": "https://github.com/GrossLukas/richdocuments",
+  "license": "AGPL-3.0-only",
+  "modified-by": "BW-Tech GmbH",
   "config": {
     "platform": {
-      "php": "8.3"
+      "php": "8.4"
     },
     "allow-plugins": {
       "bamarni/composer-bin-plugin": true
     }
   },
   "require": {
-    "php": ">=8.3"
+    "php": ">=8.4"
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8",
@@ -19,5 +23,9 @@
     "bamarni-bin": {
       "bin-links": false
     }
+  },
+  "support": {
+    "issues": "https://github.com/GrossLukas/richdocuments/issues",
+    "source": "https://github.com/GrossLukas/richdocuments"
   }
 }

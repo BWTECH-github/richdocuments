@@ -1,4 +1,5 @@
 name: CI
+# Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
 
 on:
   push:
@@ -19,7 +20,7 @@ concurrency:
 
 env:
   APP_NAME: richdocuments
-  PHP_VERSIONS: '["8.3"]'
+  PHP_VERSIONS: '["8.4"]'
 
 jobs:
   get-vars:
