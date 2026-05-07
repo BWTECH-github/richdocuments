@@ -3,6 +3,7 @@
  * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2023, ownCloud GmbH
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -426,7 +427,7 @@ class WopiController extends Controller {
 		// Handle wopiHeaderTime
 		if (!$wopiHeaderTime) {
 			$this->logger->debug('PutFile: X-LOOL-WOPI-Timestamp absent. Saving file.', ['app' => $this->appName]);
-		} elseif ($wopiHeaderTime != Helper::toISO8601($file->getMTime())) {
+		} elseif ($wopiHeaderTime !== Helper::toISO8601($file->getMTime())) {
 			$this->logger->debug('PutFile: Document timestamp mismatch ! WOPI client says mtime {headerTime} but storage says {storageTime}', [
 				'app' => $this->appName,
 				'headerTime' => $wopiHeaderTime,

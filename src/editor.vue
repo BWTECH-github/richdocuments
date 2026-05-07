@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+// Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
 import axios from 'axios'
 import {
   useAccessToken,
@@ -162,7 +163,7 @@ export default defineComponent({
       const mainContainer = document.getElementById('mainContainer')
       mainContainer.insertAdjacentHTML('beforeend', formHTML)
       mainContainer.insertAdjacentHTML('beforeend', frameHTML)
-      mainContainer.className = "oc-width-1-1 oc-height-1-1"
+      mainContainer.className = 'oc-width-1-1 oc-height-1-1'
       const loleafletForm = document.getElementById('loleafletform')
       const frame = document.getElementById('loleafletframe')
       const that = this

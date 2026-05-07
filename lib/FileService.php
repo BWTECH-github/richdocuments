@@ -3,6 +3,7 @@
  * @author Piotr Mrowczynski <piotr@owncloud.com>
  *
  * @copyright Copyright (c) 2023, ownCloud GmbH
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -241,7 +242,7 @@ class FileService {
 	 * @param bool $status Flag to enable or disable incognito mode
 	 */
 	protected function setIncognitoMode(bool $status): void {
-		\OC_User::setIncognitoMode($status);
+		\call_user_func(['OC_User', 'setIncognitoMode'], $status);
 	}
 
 	/**
@@ -250,7 +251,7 @@ class FileService {
 	 * @param string $uid User ID
 	 */
 	protected function setupFS($uid): void {
-		\OC_Util::tearDownFS();
-		\OC_Util::setupFS($uid);
+		\call_user_func(['OC_Util', 'tearDownFS']);
+		\call_user_func(['OC_Util', 'setupFS'], $uid);
 	}
 }

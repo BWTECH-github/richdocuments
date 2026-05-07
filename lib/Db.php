@@ -4,6 +4,7 @@
  *
  * @author Victor Dubiniuk
  * @copyright 2013 Victor Dubiniuk victor.dubiniuk@gmail.com
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later.
@@ -79,7 +80,7 @@ abstract class Db {
 		$data = $result->fetchAllAssociative();
 		if (!\is_array($data) || !\count($data)) {
 			$this->data = [];
-		} elseif (\count($data)!=1) {
+		} elseif (\count($data) !== 1) {
 			throw new \Exception('Duplicate [' . \implode(', ', $value) . '] for the field ' . $field);
 		} else {
 			$this->data = $data[0];

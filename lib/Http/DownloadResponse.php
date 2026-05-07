@@ -4,6 +4,7 @@
  *
  * @author Victor Dubiniuk
  * @copyright 2014 Victor Dubiniuk victor.dubiniuk@gmail.com
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later.
@@ -50,7 +51,7 @@ class DownloadResponse extends Response {
 			foreach ($ranges as $range) {
 				$parts = \explode('-', $range);
 
-				if ($parts[0]==='' && $parts[1]=='') {
+				if ($parts[0] === '' && $parts[1] === '') {
 					$this->sendRangeNotSatisfiable($size);
 				}
 				if ($parts[0]==='') {

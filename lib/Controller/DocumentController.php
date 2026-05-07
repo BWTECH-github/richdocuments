@@ -5,6 +5,7 @@
  * @author Szymon Kłos <szymon.klos@collabora.com>
  *
  * @copyright Copyright (c) 2023, ownCloud GmbH
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -147,7 +148,7 @@ class DocumentController extends Controller {
 
 	private function responseError($message, $hint = '') {
 		$errors = ['errors' => [['error' => $message, 'hint' => $hint]]];
-		$response = new TemplateResponse('', 'error', $errors, 'error');
+		$response = new TemplateResponse('richdocuments', 'error', $errors, 'blank');
 		return $response;
 	}
 
@@ -537,7 +538,7 @@ class DocumentController extends Controller {
 		$wopiRemoteParts = \parse_url($wopiRemote);
 		if (isset($wopiRemoteParts['scheme'], $wopiRemoteParts['host'])) {
 			$webSocketProtocol = "ws://";
-			if ($wopiRemoteParts['scheme'] == "https") {
+			if ($wopiRemoteParts['scheme'] === "https") {
 				$webSocketProtocol = "wss://";
 			}
 			$webSocket = \sprintf(
@@ -613,7 +614,7 @@ class DocumentController extends Controller {
 
 		$content = '';
 		if (\class_exists('\OC\Files\Type\TemplateManager')) {
-			$manager = \OC_Helper::getFileTemplateManager();
+			$manager = \call_user_func(['OC_Helper', 'getFileTemplateManager']);
 			$content = $manager->getTemplate($mimetype);
 		}
 

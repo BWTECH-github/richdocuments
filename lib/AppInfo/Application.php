@@ -5,6 +5,7 @@
  * @author Viktar Dubiniuk <dubiniuk@owncloud.com>
  *
  * @copyright Copyright (c) 2020, ownCloud GmbH
+ * Modified by BW-Tech GmbH for owncloud.online PHP 8.4 compatibility.
  * @license AGPL-3.0
  *
  * This file is licensed under the Affero General Public License version 3 or
@@ -74,7 +75,7 @@ class Application extends App {
 			}
 
 			if (\class_exists('\OC\Files\Type\TemplateManager')) {
-				$manager = \OC_Helper::getFileTemplateManager();
+				$manager = \call_user_func(['OC_Helper', 'getFileTemplateManager']);
 				$appPath = \OC::$server->getAppManager()->getAppPath('richdocuments');
 
 				$manager->registerTemplate('application/vnd.openxmlformats-officedocument.wordprocessingml.document', $appPath . '/assets/docxtemplate.docx');
@@ -114,7 +115,7 @@ class Application extends App {
 
 	private function publicLinksAllowedToUseCollabora() {
 		// FIXME: some more rules? additional collabora flag?
-		return ($this->getContainer()->getServer()->getConfig()->getAppValue('core', 'shareapi_allow_links', 'yes') == 'yes');
+		return ($this->getContainer()->getServer()->getConfig()->getAppValue('core', 'shareapi_allow_links', 'yes') === 'yes');
 	}
 
 	private function isUserAllowedToUseCollabora() {
