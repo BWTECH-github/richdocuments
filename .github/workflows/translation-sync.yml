@@ -1,8 +1,7 @@
+﻿# Modified by BW-Tech GmbH: automatic upstream translation sync is disabled for owncloud.online plugin forks.
 name: Translation Sync
 
 on:
-  schedule:
-    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
