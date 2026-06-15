@@ -11,7 +11,7 @@ script('richdocuments', 'settings-admin');
         href="https://github.com/owncloud/richdocuments/wiki">
 	</a>
 
-	<p style="max-width: 50em; color: red;"><?php if ($_['encryption_enabled'] === 'true' && $_['masterkey_encryption_enabled'] !== 'true') {
+	<p style="max-width: 50em; color: #c00;"><?php if ($_['encryption_enabled'] === 'true' && $_['masterkey_encryption_enabled'] !== 'true') {
 		p($l->t("Enabled encryption type will result in limited functionality of the app. App requires privileged access to the files, and the only currently supported type is master key encryption."));
 	} ?></p>
 

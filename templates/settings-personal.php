@@ -9,7 +9,7 @@ script('richdocuments', 'settings-personal');
 	<?php p($l->t("Connect Zotero for Bibliography and Citation inside Collabora Online.")); ?>
 	<br />
 
-	<p style="max-width: 50em; color: red;"><?php if ($_['zotero'] !== 'true') {
+	<p style="max-width: 50em; color: #c00;"><?php if ($_['zotero'] !== 'true') {
 		p($l->t("Zotero integration is disabled, ask your administrator to enable it."));
 	} ?></p>
 	<p id="change_zotero_key_section-richdocuments" class="indent <?php if ($_['zotero'] !== 'true') {

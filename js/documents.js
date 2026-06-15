@@ -240,7 +240,7 @@ var documentsMain = {
 			'<div id="revPanelHeader">' +
 			'<h2>Revision History</h2>' +
 			'<span>{{filename}}</span>' +
-			'<a class="closeButton"><img src={{closeButtonUrl}} width="22px" height="22px"></a>' +
+			'<a class="closeButton" aria-label="{{closeLabel}}"><img src="{{closeButtonUrl}}" alt="" width="22" height="22"></a>' +
 			'</div>' +
 			'<div id="revisionsContainer" class="loleaflet-font">' +
 			'<ul></ul>' +
@@ -342,7 +342,8 @@ var documentsMain = {
 			var revHistoryContainerTemplate = Handlebars.compile(documentsMain.UI.revHistoryContainerTemplate);
 			var revHistoryContainer = revHistoryContainerTemplate({
 				filename: documentsMain.fileName,
-				closeButtonUrl: OC.imagePath('core', 'actions/close')
+				closeButtonUrl: OC.imagePath('core', 'actions/close'),
+				closeLabel: t('richdocuments', 'Close revision history')
 			});
 			$('#revViewerContainer').prepend(revHistoryContainer);
 
