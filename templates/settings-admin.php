@@ -26,7 +26,7 @@ script('richdocuments', 'settings-admin');
     <br/>
 
     <input type="checkbox" class="test-server-enable" id="test_server_enable-richdocuments" />
-    <label for="test-server-enable-richdocuments"><?php p($l->t('Enable test server for specific groups')) ?></label>
+    <label for="test_server_enable-richdocuments"><?php p($l->t('Enable test server for specific groups')) ?></label>
     <p id="test_server_section-richdocuments" style="padding-left: 28px;" class="indent <?php if ($_['test_server_groups'] === '' || $_['test_wopi_url'] === '') {
     	p('hidden');
     } ?>">
@@ -57,7 +57,7 @@ script('richdocuments', 'settings-admin');
 	<br/>
 
 	<input type="checkbox" id="enable_canonical_webroot_cb-richdocuments" <?php p($_['canonical_webroot'] !== '' ? 'checked' : '') ?> />
-	<label for="canonical_webroot_cb-richdocuments"><?php p($l->t('Use Canonical webroot')) ?></label>
+	<label for="enable_canonical_webroot_cb-richdocuments"><?php p($l->t('Use Canonical webroot')) ?></label>
 	<div id="enable_canonical_webroot_section-richdocuments" style="padding-left: 28px;" class="indent <?php if ($_['canonical_webroot'] === '') {
 		p('hidden');
 	} ?>" >
