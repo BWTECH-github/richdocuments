@@ -8,6 +8,7 @@ script('richdocuments', 'settings-admin');
 	<h2 class="app-name has-documentation"><?php p($l->t('Collabora Online')) ?></h2>
 	<a target="_blank" rel="noreferrer" class="icon-info"
         title="<?php p($l->t('Open documentation'));?>"
+        aria-label="<?php p($l->t('Open documentation'));?>"
         href="https://github.com/owncloud/richdocuments/wiki">
 	</a>
 
@@ -78,6 +79,7 @@ script('richdocuments', 'settings-admin');
 	<h2 class="app-name has-documentation"><?php p($l->t('Secure View for Collabora Online')) ?></h2>
 	<a target="_blank" rel="noreferrer" class="icon-info"
                 title="<?php p($l->t('Open documentation'));?>"
+                aria-label="<?php p($l->t('Open documentation'));?>"
                 href="https://doc.owncloud.com/server/next/admin_manual/enterprise/collaboration/collabora_secure_view.html"></a>
 
 	<br/>
@@ -125,6 +127,7 @@ script('richdocuments', 'settings-admin');
 	<h2 class="app-name has-documentation"><?php p($l->t('Zotero for Collabora Online')) ?></h2>
 	<a target="_blank" rel="noreferrer" class="icon-info"
                 title="<?php p($l->t('Open documentation'));?>"
+                aria-label="<?php p($l->t('Open documentation'));?>"
                 ref="https://github.com/owncloud/richdocuments/wiki"></a>
 
 	<br/>

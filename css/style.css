@@ -47,7 +47,7 @@
 .add-document .add-odg,
 .add-document .upload {
 	opacity: .7;
-	border: 1px solid #e8e8e8;
+	border: 1px solid #949494;
 }
 .add-document .upload {
 	margin-top: 12px;
@@ -75,7 +75,7 @@
 }
 
 .documentslist .progress{
-	border: 1px solid #e8e8e8;
+	border: 1px solid #949494;
 }
 
 .documentslist .progress div{
@@ -101,7 +101,7 @@
 	width: 200px;
 	background-repeat: no-repeat;
 	background-size: 200px;
-	border: 1px solid #e8e8e8;
+	border: 1px solid #949494;
 }
 .document a:hover {
 	border: 1px solid #818181;
@@ -530,7 +530,7 @@ document p{
 	height: 85px;
 }
 .oc-dialog .fileexists .conflict .filename {
-	color:#777;
+	color:#6e6e6e;
 	word-break: break-all;
 	clear: left;
 }
