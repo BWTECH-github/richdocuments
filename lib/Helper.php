@@ -19,7 +19,6 @@ use \DateTimeZone;
 
 class Helper {
 	public static $MIMETYPE_LIBREOFFICE_WORDPROCESSOR = [
-		'application/pdf',
 		'application/vnd.oasis.opendocument.text',
 		'application/vnd.oasis.opendocument.presentation',
 		'application/vnd.oasis.opendocument.spreadsheet',
