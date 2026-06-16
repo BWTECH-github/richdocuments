@@ -8,6 +8,8 @@
  *
  * This file is licensed under the Affero General Public License version 3 or
  * later.
+ *
+ * modified by BW-Tech GmbH
  */
 
 namespace OCA\Richdocuments;
@@ -34,7 +36,6 @@ class Helper {
 		'application/msword',
 		'application/rtf',
 		'text/rtf',
-		'text/plain',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
 		'application/vnd.ms-word.document.macroEnabled.12',
