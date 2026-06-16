@@ -1,4 +1,5 @@
 /* globals FileList, OCA.Files.fileActions, oc_debug */
+/* modified by BW-Tech GmbH */
 var odfViewer = {
 	isDocuments : false,
 	supportedMimes: [
@@ -19,7 +20,6 @@ var odfViewer = {
 		'application/msword',
 		'application/rtf',
 		'text/rtf',
-		'text/plain',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 		'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
 		'application/vnd.ms-word.document.macroEnabled.12',
