@@ -9,7 +9,7 @@ Modified by BW-Tech GmbH for owncloud.online and PHP 8.4 compatibility.
 
 Collabora Online for ownCloud provides collaborating editing functions for text documents, spreadsheets and presentations inside ownCloud for improved productivity.
 
-See also: https://owncloud.com/collabora/collaborative-editing/
+See also: https://owncloud.online
 
 ### Configuration
 
@@ -50,8 +50,8 @@ NOTE: it is possible to use Collabora Online’s integration with re-compiled an
 ## Installing connector for ownCloud Web
 
 You will need:
-* [ownCloud server](https://owncloud.com/download-server/#owncloud-server) with ownCloud Web (it can be compiled from source code or installed from the [official marketplace](https://marketplace.owncloud.com/apps/web)).
-* Official ownCloud Collabora Online integration app. You can install it from the [ownCloud marketplace](https://marketplace.owncloud.com/apps/richdocuments).
+* [ownCloud server](https://owncloud.online) with ownCloud Web (it can be compiled from source code or installed from the [official marketplace](https://owncloud.online)).
+* Official ownCloud Collabora Online integration app. You can install it from the [ownCloud marketplace](https://owncloud.online).
 
 To enable work within ownCloud web, register the connector in the ownCloud Web config.json:
 
