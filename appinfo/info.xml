@@ -25,9 +25,6 @@ Modified by BW-Tech GmbH for owncloud.online and PHP 8.4 compatibility.]]></desc
 		<owncloud min-version="11" max-version="11.99" />
 		<php min-version="8.4" />
 	</dependencies>
-	<screenshot>https://owncloud.com/wp-content/uploads/2016/07/code_v2_writer-1-1024x576.png</screenshot>
-	<screenshot>https://owncloud.com/wp-content/uploads/2016/07/code_v2_calc-1-1024x576.png</screenshot>
-	<screenshot>https://owncloud.com/wp-content/uploads/2016/07/code_v2_impress-1-1024x576.png</screenshot>
 	<ocsid>174727</ocsid>
 	<use-migrations>true</use-migrations>
 	<background-jobs>
