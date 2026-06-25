@@ -41,7 +41,6 @@ The easiest way to integrate Collabora with development instance of ownCloud is 
 
 - Set in `Settings -> Admin -> Additional -> Collabora Online server -> http://[your-host-public-ip]:9980`
 
-
 ### Installation
 
 NOTE: Collabora server needs to be reachable from ownCloud server, and Collabora server needs to be able to reach ownCloud server
