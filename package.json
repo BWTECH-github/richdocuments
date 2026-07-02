@@ -20,7 +20,7 @@
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz",
     "eslint": "8.57.1",
     "prettier": "3.8.1",
-    "typescript": "4.9.5",
+    "typescript": "6.0.3",
     "vite": "5.4.21",
     "vue": "3.5.30"
   },
