@@ -73,7 +73,7 @@ OC.L10N.register(
     "Share with users or groups …" : "Podijeli sa korisnicima ili grupama ...",
     "Share with users, groups or remote users …" : "Podijeli sa korisnicima, grupama ili udaljenim korisnicima ...",
     "Share" : "Dijeljenje",
-    "Share with people on other ownClouds using the syntax username@example.com/owncloud" : "Podijelite sa korisnicima drugoga ownClouda koristeći format korisnickoime@example.com/owncloud",
+    "Share with people on other servers using the syntax username@example.com/owncloud" : "Podijelite sa korisnicima drugoga owncloud.onlinea koristeći format korisnickoime@example.com/owncloud",
     "Share link" : "Podijelite vezu",
     "The public link will expire no later than {days} days after it is created" : " Javna veza ističe najkasnije {days} dana nakon što je kreirana",
     "Link" : "Poveznica",

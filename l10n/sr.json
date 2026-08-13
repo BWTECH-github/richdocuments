@@ -71,7 +71,7 @@
     "Share with users or groups …" : "Дели са корисницима или групама...",
     "Share with users, groups or remote users …" : "Дели са корисницима, групама или удаљеним корисницима...",
     "Share" : "Дељење",
-    "Share with people on other ownClouds using the syntax username@example.com/owncloud" : "Поделите са људима у другим облацима користећи синтаксу корисничкоиме@сервер.com/owncloud",
+    "Share with people on other servers using the syntax username@example.com/owncloud" : "Поделите са људима у другим облацима користећи синтаксу корисничкоиме@сервер.com/owncloud",
     "Share link" : "Веза дељења",
     "The public link will expire no later than {days} days after it is created" : "Јавна веза ће престати да важи {days} дана након стварања",
     "Link" : "Веза",

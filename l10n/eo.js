@@ -72,7 +72,7 @@ OC.L10N.register(
     "Share with users or groups …" : "Kunhavigi kun uzantoj aŭ grupoj..",
     "Share with users, groups or remote users …" : "Kunhavigi kun uzantoj, grupoj aŭ foraj uzantoj...",
     "Share" : "Kunhavigi",
-    "Share with people on other ownClouds using the syntax username@example.com/owncloud" : "Kunhaviki kun homoj en aliaj ownCloud-oj uzante la sintakson uzantonomo@ekzemplo.com/owncloud",
+    "Share with people on other servers using the syntax username@example.com/owncloud" : "Kunhaviki kun homoj en aliaj owncloud.online-oj uzante la sintakson uzantonomo@ekzemplo.com/owncloud",
     "Share link" : "Kunhavigi ligilon",
     "The public link will expire no later than {days} days after it is created" : "La publika ligilo senvalidiĝos ne pli malfrue ol {days} tagojn post ĝi kreiĝos",
     "Link" : "Ligilo",

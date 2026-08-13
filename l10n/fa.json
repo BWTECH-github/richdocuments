@@ -71,7 +71,7 @@
     "Share with users or groups …" : "اشتراک گذاری با کاربران یا گروه ها ...",
     "Share with users, groups or remote users …" : "اشتراک گذاری با کاربران، گروه‌ها یا کاربران راه دور...",
     "Share" : "اشتراک‌گذاری",
-    "Share with people on other ownClouds using the syntax username@example.com/owncloud" : "اشتراک‌گذاری با دیگر افراد بر روی ownClouds بصورت username@example.com/owncloud",
+    "Share with people on other servers using the syntax username@example.com/owncloud" : "اشتراک‌گذاری با دیگر افراد بر روی Servern بصورت username@example.com/owncloud",
     "Share link" : "اشتراک گذاشتن لینک",
     "The public link will expire no later than {days} days after it is created" : "لینک عمومی پس از {days} روز پس از ایجاد منقضی خواهد شد",
     "Link" : "لینک",

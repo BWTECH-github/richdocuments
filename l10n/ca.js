@@ -79,7 +79,7 @@ OC.L10N.register(
     "Share with users or groups …" : "Comparteix amb usuaris o grups ...",
     "Share with users, groups or remote users …" : "Comparteix amb usuaris, grups o usuaris remots ...",
     "Share" : "Compartir",
-    "Share with people on other ownClouds using the syntax username@example.com/owncloud" : "Compartir amb la gent en altres ownClouds utilitzant la sintaxi username@example.com/owncloud",
+    "Share with people on other servers using the syntax username@example.com/owncloud" : "Compartir amb la gent en altres Servern utilitzant la sintaxi username@example.com/owncloud",
     "Share link" : "Comparteix l'enllaç",
     "The public link will expire no later than {days} days after it is created" : "L'enllaç públic tindrà venciment abans de {days} dies després de crear-lo",
     "Link" : "Enllaç",
