@@ -1,26 +1,32 @@
-## Submitting issues
+# Beitragen
 
-If you have questions about how to install or use ownCloud, please direct these to the [mailing list][mailinglist] or our [forum][forum]. We are also available on [IRC][irc].
+Dieses Plugin gehoert zu [owncloud.online](https://owncloud.online) und wird von
+der BW-Tech GmbH gepflegt.
 
-### Short version
+## Fehler melden
 
- * The [**issue template can be found here**][template]. Please always use the issue template when reporting issues.
+Als [Issue](https://github.com/BWTECH-github/richdocuments/issues) in diesem Repository. Hilfreich ist:
 
-### Guidelines
-* Please search the existing issues first, it's likely that your issue was already reported or even fixed.
-  - Go to one of the repositories, click "issues" and type any word in the top search/command bar.
-  - You can also filter by appending e. g. "state:open" to the search string.
-  - More info on [search syntax within github](https://help.github.com/articles/searching-issues)
-* This repository ([documents](https://github.com/owncloud/contacts/issues)) is *only* for issues within the ownCloud documents code.
-* __SECURITY__: Report any potential security bug to security@owncloud.com following our [security policy](https://owncloud.org/security/) instead of filing an issue in our bug tracker
-* Report the issue using our [template][template], it includes all the information we need to track down the issue.
+* die Version des Plugins und des Servers
+* PHP-Version, Datenbank, Betriebssystem
+* die Schritte, mit denen sich das Verhalten erzeugen laesst
+* der passende Ausschnitt aus `data/owncloud.log`, vorher auf Namen, Pfade und
+  Token durchgesehen
 
-Help us to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.
+**Sicherheitsluecken gehoeren nicht in ein Issue.** Bitte vertraulich an
+**security@bw.tech**.
 
-[template]: https://raw.github.com/owncloud/core/master/issue_template.md
-[mailinglist]: https://mailman.owncloud.org/mailman/listinfo/owncloud
-[forum]: https://forum.owncloud.org/
-[irc]: https://webchat.freenode.net/?channels=owncloud&uio=d4
+## Aenderungen einbringen
 
-### Contribute Code and translations
-Please check [core's contribution guidelines](https://github.com/owncloud/core/blob/master/CONTRIBUTING.md) for further information about contributing code and translations.
+1. Zweig vom Standardzweig abzweigen.
+2. Ein Thema pro Pull Request.
+3. Tests ergaenzen, wo sich Verhalten aendert.
+4. Commit-Nachrichten im Format
+   [Conventional Commits](https://www.conventionalcommits.org/) - die CI prueft
+   das.
+5. Im Pull Request beschreiben, **warum** die Aenderung noetig ist.
+
+## Herkunft
+
+Fork der gleichnamigen ownCloud-App. Der Dank fuer die urspruengliche Arbeit
+gehoert der ownCloud-Gemeinschaft; dieser Fork wird davon unabhaengig gepflegt.
