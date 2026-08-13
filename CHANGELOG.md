@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 
+## [4.3.3] - 2026-08-13
+
+### Changed
+
+- README als Betriebsdokumentation neu geschrieben: Installation, Einstellungen,
+  Kommandozeile und Fehlersuche; tote und fremde Verweise entfernt.
+
 ## [4.3.2] - 2026-08-13
 
 ### Changed
