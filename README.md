@@ -1,13 +1,9 @@
-ownCloud application to integrate Collabora Online
+owncloud.online application to integrate Collabora Online
 ==================================================
 
 Modified by BW-Tech GmbH for owncloud.online and PHP 8.4 compatibility.
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_richdocuments&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_richdocuments)
-
-Collabora Online for ownCloud provides collaborating editing functions for text documents, spreadsheets and presentations inside ownCloud for improved productivity.
+Collabora Online for owncloud.online provides collaborating editing functions for text documents, spreadsheets and presentations inside owncloud.online for improved productivity.
 
 See also: https://owncloud.online
 
@@ -29,7 +25,7 @@ See also: https://owncloud.online
 
 ### Developing
 
-The easiest way to integrate Collabora with development instance of ownCloud is by disabling SSL for Collabora.
+The easiest way to integrate Collabora with development instance of owncloud.online is by disabling SSL for Collabora.
 
 - Start Collabora Server with default settings
 
@@ -43,19 +39,19 @@ The easiest way to integrate Collabora with development instance of ownCloud is 
 
 ### Installation
 
-NOTE: Collabora server needs to be reachable from ownCloud server, and Collabora server needs to be able to reach ownCloud server
+NOTE: Collabora server needs to be reachable from owncloud.online server, and Collabora server needs to be able to reach owncloud.online server
 
 NOTE: it is possible to use Collabora Online’s integration with re-compiled and/or re-branded backends.
 
-## Installing connector for ownCloud Web
+## Installing connector for owncloud.online Web
 
 You will need:
-* [ownCloud server](https://owncloud.online) with ownCloud Web (it can be compiled from source code or installed from the [official marketplace](https://owncloud.online)).
-* Official ownCloud Collabora Online integration app. You can install it from the [ownCloud marketplace](https://owncloud.online).
+* [owncloud.online server](https://owncloud.online) with owncloud.online Web (it can be compiled from source code or installed from the [official marketplace](https://owncloud.online)).
+* Official owncloud.online Collabora Online integration app. You can install it from the [owncloud.online marketplace](https://owncloud.online).
 
-To enable work within ownCloud web, register the connector in the ownCloud Web config.json:
+To enable work within owncloud.online web, register the connector in the owncloud.online Web config.json:
 
-* If you installed ownCloud Web from the official marketplace, the path is `<owncloud-root-catalog>/config/config.json`
+* If you installed owncloud.online Web from the official marketplace, the path is `<owncloud-root-catalog>/config/config.json`
 * If you compiled it from source code yourself using [this instruction](https://owncloud.dev/clients/web/backend-oc10/#running-web), the path is `<owncloud-web-root-catalog>/config/config.json`.
 
 To register the connector, use these lines:
@@ -69,7 +65,7 @@ To register the connector, use these lines:
 ]
 ```
 
-## Compiling the connector for ownCloud Web
+## Compiling the connector for owncloud.online Web
 
 Build all the dependencies:
 
