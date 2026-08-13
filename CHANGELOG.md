@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 
+## [4.3.2] - 2026-08-13
+
+### Changed
+
+- Produktname, Beschreibung und uebersetzte Zeichenketten nennen owncloud.online;
+  Verweise auf Fehlerbereich, Repository und Dokumentation zeigen auf das eigene
+  Repository. Screenshots aus fremden Repositories entfernt.
+
 ## [4.2.2] - 2025-11-19
 
 ### Fixed
