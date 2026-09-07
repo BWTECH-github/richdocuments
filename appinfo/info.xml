@@ -12,7 +12,7 @@ You can also edit your documents off-line with the Collabora Office app from the
 Modified by BW-Tech GmbH for owncloud.online and PHP 8.4 compatibility.]]></description>
 	<summary>Edit office documents directly in your browser.</summary>
 	<licence>AGPL</licence>
-	<version>4.3.3</version>
+	<version>4.3.4</version>
 	<author>Collabora Productivity based on work of Frank Karlitschek, Victor Dubiniuk, modified by BW-Tech GmbH</author>
 	<bugs>https://github.com/BWTECH-github/richdocuments/issues</bugs>
 	<repository type="git">https://github.com/BWTECH-github/richdocuments.git</repository>
