@@ -128,7 +128,7 @@ script('richdocuments', 'settings-admin');
 	<a target="_blank" rel="noreferrer" class="icon-info"
                 title="<?php p($l->t('Open documentation'));?>"
                 aria-label="<?php p($l->t('Open documentation'));?>"
-                ref="https://github.com/owncloud/richdocuments/wiki"></a>
+                href="https://github.com/owncloud/richdocuments/wiki"></a>
 
 	<br/>
 	<em><?php p($l->t("Connect Zotero for Bibliography and Citation inside Collabora Online.")); ?><a href="https://www.collaboraoffice.com/collabora-online-22-05-release-notes/" target="_blank"> <?php p($l->t("Collabora Online 22.05.10 and above required")); ?> </a></em>
