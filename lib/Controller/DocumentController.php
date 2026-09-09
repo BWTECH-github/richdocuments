@@ -146,9 +146,18 @@ class DocumentController extends Controller {
 		$this->federationService = $federationService;
 	}
 
-	private function responseError($message, $hint = '') {
+	/**
+	 * @param string $message
+	 * @param string $hint
+	 * @param string $renderAs 'user' zeigt die Meldung in der Oberflaeche; 'blank'
+	 *                         liefert eine eigenstaendige Seite fuer die
+	 *                         oeffentlichen Routen, die ohne Sitzung laufen.
+	 * @return TemplateResponse
+	 */
+	private function responseError($message, $hint = '', $renderAs = 'blank') {
 		$errors = ['errors' => [['error' => $message, 'hint' => $hint]]];
-		$response = new TemplateResponse('richdocuments', 'error', $errors, 'blank');
+		$template = $renderAs === 'user' ? 'error-inline' : 'error';
+		$response = new TemplateResponse('richdocuments', $template, $errors, $renderAs);
 		return $response;
 	}
 
@@ -182,7 +191,7 @@ class DocumentController extends Controller {
 			// base template
 			$fileId = null;
 		} else {
-			return $this->responseError($this->l10n->t('Invalid request parameters'));
+			return $this->responseError($this->l10n->t('Invalid request parameters'), '', 'user');
 		}
 
 		// Get doc index if possible
@@ -193,7 +202,8 @@ class DocumentController extends Controller {
 				$this->logger->warning("Cannot retrieve document with fileid {fileid} in dir {dir}", ["fileid" => $fileId, "dir" => $dir]);
 				return $this->responseError(
 					$this->l10n->t('Collabora Online: Error encountered while opening the document.', []),
-					$this->l10n->t('Please contact the administrator.', [])
+					$this->l10n->t('Please contact the administrator.', []),
+					'user'
 				);
 			}
 
@@ -220,7 +230,8 @@ class DocumentController extends Controller {
 				$this->logger->error("Cannot retrieve discovery for document", []);
 				return $this->responseError(
 					$this->l10n->t('Collabora Online: Error encountered while opening the document.', []),
-					$this->l10n->t('Please contact the administrator.', [])
+					$this->l10n->t('Please contact the administrator.', []),
+					'user'
 				);
 			}
 	
@@ -252,7 +263,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote, 'user');
 		}
 
 		$retVal = \array_merge(
@@ -331,7 +342,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote);
 		}
 
 		// FIXME: In public links allow max 100MB
@@ -421,7 +432,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote);
 		}
 
 		// FIXME: In federated shares allow max 100MB
@@ -529,6 +540,31 @@ class DocumentController extends Controller {
 	 */
 	private function getLocale() : string {
 		return \strtolower(\str_replace('_', '-', $this->settings->getUserValue($this->getCurrentUserUID(), 'core', 'lang', 'en')));
+	}
+
+	/**
+	 * Meldung fuer eine unbrauchbare Serveradresse. Ohne eingerichteten Server
+	 * ist die Adresse leer, und die bisherige Auskunft zur ungueltigen Adresse
+	 * war dafuer falsch: es ist nichts falsch eingetragen, sondern noch nichts
+	 * eingetragen.
+	 *
+	 * @param string $wopiRemote
+	 * @param string $renderAs
+	 * @return TemplateResponse
+	 */
+	private function wopiUrlError(string $wopiRemote, string $renderAs = 'blank') {
+		if (\trim($wopiRemote) === '') {
+			return $this->responseError(
+				$this->l10n->t('Collabora Online: no server configured.'),
+				$this->l10n->t('Please ask your administrator to enter the address of the Collabora Online server in the app settings.'),
+				$renderAs
+			);
+		}
+		return $this->responseError(
+			$this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]),
+			$this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'),
+			$renderAs
+		);
 	}
 
 	/**
