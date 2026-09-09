@@ -37,7 +37,7 @@ OC.L10N.register(
     "Drawing": "Zeichnung",
     "Could not create file": "Die Datei konnte nicht erstellt werden",
     "View/Edit in Collabora": "In Collabora ansehen/bearbeiten",
-    "Office": "Büro",
+    "Office": "Office",
     "Invalid request parameters": "Ungültige Anfrageparameter",
     "Collabora Online: Error encountered while opening the document.": "Collabora Online: Fehler beim Öffnen des Dokuments.",
     "Please contact the administrator.": "Bitte die Administration kontaktieren.",
