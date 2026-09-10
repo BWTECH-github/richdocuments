@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@ownclouders/web-pkg':
         specifier: ^0.0.3
-        version: 0.0.3(@casl/ability@6.8.1)(@casl/vue@2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5)))(@ownclouders/web-client@0.0.1(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(lodash-es@4.18.1))(@ownclouders/web-pkg@0.0.3)(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(filesize@9.0.11)(fuse.js@6.6.2)(lodash-es@4.18.1)(luxon@2.5.2)(mark.js@8.11.1)(qs@6.16.0)(uuid@9.0.1)(vue-concurrency@4.0.1(vue@3.5.30(typescript@4.9.5)))(vue-router@4.2.0(vue@3.5.30(typescript@4.9.5)))(vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5)))(vuex@4.1.0(vue@3.5.30(typescript@4.9.5)))
+        version: 0.0.3(@casl/ability@6.8.1)(@casl/vue@2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5)))(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(filesize@9.0.11)(fuse.js@6.6.2)(lodash-es@4.18.1)(luxon@2.5.2)(mark.js@8.11.1)(qs@6.16.0)(uuid@9.0.1)(vue-concurrency@4.0.1(vue@3.5.30(typescript@4.9.5)))(vue-router@4.2.0(vue@3.5.30(typescript@4.9.5)))(vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5)))(vuex@4.1.0(vue@3.5.30(typescript@4.9.5)))
     devDependencies:
       '@ownclouders/eslint-config':
         specifier: 0.0.1
@@ -34,8 +34,8 @@ importers:
         specifier: 8.57.1
         version: 8.57.1(supports-color@7.2.0)
       prettier:
-        specifier: 3.8.1
-        version: 3.8.1
+        specifier: 3.9.6
+        version: 3.9.6
       typescript:
         specifier: 4.9.5
         version: 4.9.5
@@ -354,12 +354,6 @@ packages:
 
   '@ownclouders/tsconfig@0.0.6':
     resolution: {integrity: sha512-60BM0Syi8uHD0C+PmLFcS2e4upuOEL02itPw9wayznfOuu07sUasADSzkL0ud0zcr6je9TKQZR8hPLxZF1OTbQ==}
-
-  '@ownclouders/web-client@0.0.1':
-    resolution: {integrity: sha512-rXzGkCtYbFdLFmWj8h0aysEAT5zKUerXtQ1hfU6hy9b9QMly5JnaUr++WdiVXlnt0Ko9zGFmQsYwosJJkTO34A==}
-    peerDependencies:
-      axios: ^0.27.2
-      lodash-es: ^4.17.21
 
   '@ownclouders/web-pkg@0.0.3':
     resolution: {integrity: sha512-tipiCVLhkQ+RXTArnUYmUkDsL+F9h0cZizxpEovs/WOys/XshsC61uTzbWSxlhHAd5bg/wOj/s4gqM6GxqYkqw==}
@@ -1762,8 +1756,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.8.1:
-    resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
+  prettier@3.9.6:
+    resolution: {integrity: sha512-OpN0zzVdiaiAhxpuuj5efpIS4sY9j7bY6uR5mnj5yPzGkdkjNKSJeUThPb60Jw29QuAZgA4o+/iB49kFiaBX6g==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2447,12 +2441,7 @@ snapshots:
 
   '@ownclouders/tsconfig@0.0.6': {}
 
-  '@ownclouders/web-client@0.0.1(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(lodash-es@4.18.1)':
-    dependencies:
-      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      lodash-es: 4.18.1
-
-  '@ownclouders/web-pkg@0.0.3(@casl/ability@6.8.1)(@casl/vue@2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5)))(@ownclouders/web-client@0.0.1(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(lodash-es@4.18.1))(@ownclouders/web-pkg@0.0.3)(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(filesize@9.0.11)(fuse.js@6.6.2)(lodash-es@4.18.1)(luxon@2.5.2)(mark.js@8.11.1)(qs@6.16.0)(uuid@9.0.1)(vue-concurrency@4.0.1(vue@3.5.30(typescript@4.9.5)))(vue-router@4.2.0(vue@3.5.30(typescript@4.9.5)))(vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5)))(vuex@4.1.0(vue@3.5.30(typescript@4.9.5)))':
+  '@ownclouders/web-pkg@0.0.3(@casl/ability@6.8.1)(@casl/vue@2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5)))(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(filesize@9.0.11)(fuse.js@6.6.2)(lodash-es@4.18.1)(luxon@2.5.2)(mark.js@8.11.1)(qs@6.16.0)(uuid@9.0.1)(vue-concurrency@4.0.1(vue@3.5.30(typescript@4.9.5)))(vue-router@4.2.0(vue@3.5.30(typescript@4.9.5)))(vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5)))(vuex@4.1.0(vue@3.5.30(typescript@4.9.5)))':
     dependencies:
       '@casl/ability': 6.8.1
       '@casl/vue': 2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5))
@@ -2468,8 +2457,6 @@ snapshots:
       vue-router: 4.2.0(vue@3.5.30(typescript@4.9.5))
       vue3-gettext: 2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5))
       vuex: 4.1.0(vue@3.5.30(typescript@4.9.5))
-      web-client: '@ownclouders/web-client@0.0.1(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(lodash-es@4.18.1)'
-      web-pkg: '@ownclouders/web-pkg@0.0.3(@casl/ability@6.8.1)(@casl/vue@2.2.6(@casl/ability@6.8.1)(vue@3.5.30(typescript@4.9.5)))(@ownclouders/web-client@0.0.1(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(lodash-es@4.18.1))(@ownclouders/web-pkg@0.0.3)(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(filesize@9.0.11)(fuse.js@6.6.2)(lodash-es@4.18.1)(luxon@2.5.2)(mark.js@8.11.1)(qs@6.16.0)(uuid@9.0.1)(vue-concurrency@4.0.1(vue@3.5.30(typescript@4.9.5)))(vue-router@4.2.0(vue@3.5.30(typescript@4.9.5)))(vue3-gettext@2.5.0-alpha.1(@vue/compiler-sfc@3.5.42)(vue@3.5.30(typescript@4.9.5)))(vuex@4.1.0(vue@3.5.30(typescript@4.9.5)))'
 
   '@rollup/rollup-android-arm-eabi@4.63.1':
     optional: true
@@ -4014,7 +4001,7 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.8.1: {}
+  prettier@3.9.6: {}
 
   proxy-from-env@2.1.0: {}
 
