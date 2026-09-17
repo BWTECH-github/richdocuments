@@ -277,7 +277,7 @@ var documentsMain = {
 				version + "_" +
 				documentsMain.sessionId;
 			var ocurl = documentsMain._generateDocKey(documentId);
-			// WOPISrc - URL that loolwsd will access (ie. pointing to ownCloud)
+			// WOPISrc - URL that loolwsd will access (ie. pointing to this server)
 			var wopiurl = window.location.protocol + '//' + window.location.host + ocurl;
 			var wopisrc = encodeURIComponent(wopiurl);
 
@@ -437,7 +437,7 @@ var documentsMain = {
 				documentsMain.version + "_" +
 				documentsMain.sessionId;
 			var ocurl = documentsMain._generateDocKey(documentId);
-			// WOPISrc - URL that loolwsd will access (ie. pointing to ownCloud)
+			// WOPISrc - URL that loolwsd will access (ie. pointing to this server)
 			// Include the unique instanceId in the WOPI URL as part of the fileId
 			var wopiurl = window.location.protocol + '//' + window.location.host + ocurl;
 			var wopisrc = encodeURIComponent(wopiurl);

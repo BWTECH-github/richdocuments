@@ -56,7 +56,7 @@ class DocumentController extends Controller {
 	private $l10n;
 
 	/**
-	 * @var IConfig The ownCloud configuration service
+	 * @var IConfig The server configuration service
 	 */
 	private $settings;
 
@@ -176,6 +176,26 @@ class DocumentController extends Controller {
 	}
 
 	/**
+	 * Richtlinie für die Editorseite.
+	 *
+	 * Die Seite schickt das Zugriffstoken per Formular (#loleafletform, POST)
+	 * in den Rahmen des Collabora-Servers. Der Redesign-Kern setzt
+	 * form-action 'self'; ohne die Freigabe blockiert der Browser das
+	 * Absenden und der Editor bleibt leer.
+	 *
+	 * @param string $wopiRemote
+	 * @return ContentSecurityPolicy
+	 */
+	private function editorPolicy($wopiRemote) {
+		$domain = $this->domainOnly($wopiRemote);
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedFrameDomain($domain);
+		$policy->addAllowedFormActionDomain($domain);
+		$policy->allowInlineScript(true);
+		return $policy;
+	}
+
+	/**
 	 * Get collabora document for:
 	 * - the base template if fileId is null
 	 * - file in user folder (also shared by user/group) if fileId not null
@@ -255,8 +275,21 @@ class DocumentController extends Controller {
 				'path' => $docinfo['path']
 			];
 		} else {
-			// base template
-			$docRetVal = [];
+			// base template: die Vorlage liest diese Schlüssel auch ohne Dokument
+			// (sonst "Undefined array key" und ein leerer Upload-Hinweis "max. ")
+			$maxUploadFilesize = \OCP\Util::maxUploadFilesize("/");
+			$docRetVal = [
+				'uploadMaxFilesize' => $maxUploadFilesize,
+				'uploadMaxHumanFilesize' => \OCP\Util::humanFileSize($maxUploadFilesize),
+				'title' => '',
+				'fileId' => '',
+				'version' => '',
+				'sessionId' => '',
+				'access_token' => '',
+				'access_token_ttl' => '',
+				'urlsrc' => '',
+				'path' => ''
+			];
 		}
 
 		// Handle general response
@@ -287,10 +320,7 @@ class DocumentController extends Controller {
 
 		// prepare template response
 		$response = new TemplateResponse('richdocuments', 'documents', $retVal, $renderAs);
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedFrameDomain($this->domainOnly($wopiRemote));
-		$policy->allowInlineScript(true);
-		$response->setContentSecurityPolicy($policy);
+		$response->setContentSecurityPolicy($this->editorPolicy($wopiRemote));
 
 		return $response;
 	}
@@ -374,14 +404,11 @@ class DocumentController extends Controller {
 		];
 
 		$response = new TemplateResponse('richdocuments', 'documents', $retVal, $renderAs);
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedFrameDomain($this->domainOnly($wopiRemote));
-		$policy->allowInlineScript(true);
-		$response->setContentSecurityPolicy($policy);
+		$response->setContentSecurityPolicy($this->editorPolicy($wopiRemote));
 
 		return $response;
 	}
-	
+
 	/**
 	 * Get collabora document for remote (e.g. federated) share by token:
 	 * - file shared by public link (shareToken points directly to file)
@@ -465,10 +492,7 @@ class DocumentController extends Controller {
 
 		$response = new TemplateResponse('richdocuments', 'documents', $retVal, $renderAs);
 		$response->addHeader('X-Frame-Options', 'ALLOW');
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedFrameDomain($this->domainOnly($wopiRemote));
-		$policy->allowInlineScript(true);
-		$response->setContentSecurityPolicy($policy);
+		$response->setContentSecurityPolicy($this->editorPolicy($wopiRemote));
 
 		return $response;
 	}
@@ -794,7 +818,7 @@ class DocumentController extends Controller {
 			// we need to assign server host to be remote server where the editing will happen
 			$serverHost = $federatedServer;
 		} elseif ($origin !== null) {
-			// COOL needs to know postMessageOrigin -- in case it's an external app like ownCloud Web
+			// COOL needs to know postMessageOrigin -- in case it's an external app like a separate web client
 			// origin will be different therefore postMessages needs to target $origin instead of serverHost
 			$serverHost = $origin;
 		} else {

@@ -52,7 +52,7 @@ class WebAssetController extends Controller {
 	}
 
 	/**
-	 * Loads the richdocuments.js file for integration into ownCloud Web
+	 * Loads the richdocuments.js file for integration into the separate web client
 	 *
 	 * @PublicPage
 	 * @NoCSRFRequired

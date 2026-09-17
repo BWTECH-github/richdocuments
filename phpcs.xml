@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="ownCloud Standard">
-	<description>ownCloud coding standard</description>
+<ruleset name="richdocuments">
+	<description>Coding standard for richdocuments</description>
 	<arg name="colors" />
 	<arg value="sp" />
 

@@ -167,6 +167,19 @@ class DocumentControllerTest extends \Test\TestCase {
 		);
 	}
 
+	/**
+	 * Die Editorseite sendet per Formular an den Collabora-Server; der Kern
+	 * erlaubt form-action sonst nur für 'self'.
+	 */
+	public function testEditorPolicyAllowsFrameAndFormToWopiServer() {
+		$methode = new \ReflectionMethod(DocumentController::class, 'editorPolicy');
+		$richtlinie = $methode->invoke($this->documentController, 'https://office.example:9980/hosting/discovery')->buildPolicy();
+
+		$this->assertStringContainsString('frame-src https://office.example:9980 blob:;', $richtlinie);
+		$this->assertStringContainsString("form-action 'self' https://office.example:9980;", $richtlinie);
+		$this->assertStringContainsString("'unsafe-inline'", $richtlinie);
+	}
+
 	public function invalidFilenameProvider(): array {
 		return [
 			["filename with\t tab"],

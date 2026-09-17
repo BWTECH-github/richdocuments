@@ -38,7 +38,6 @@ appstore:
 	--exclude=composer.json \
 	--exclude=composer.lock \
 	--exclude=l10n/.gitkeep \
-	--exclude=l10n/.tx \
 	--exclude=l10n/no-php \
 	--exclude=Makefile \
 	--exclude=nbproject \
@@ -102,7 +101,6 @@ $(dist_dir)/$(app_name): $(composer_deps) $(bower_deps)
 	rm -Rf $@; mkdir -p $@
 	cp -R $(all_src) $@
 	rm -Rf $@/l10n/.gitkeep
-	rm -Rf $@/l10n/.tx
 	rm -Rf $@/l10n/no-php
 
 ifdef CAN_SIGN
@@ -147,7 +145,7 @@ test-php-unit-dbg: vendor/bin/phpunit
 	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-style
-test-php-style: ## Run php-cs-fixer and check owncloud code-style
+test-php-style: ## Run php-cs-fixer and check the code style
 test-php-style: vendor-bin/owncloud-codestyle/vendor vendor-bin/php_codesniffer/vendor
 	$(PHP_CS_FIXER) fix -v --diff --allow-risky yes --dry-run
 	$(PHP_CODESNIFFER) --runtime-set ignore_warnings_on_exit --standard=phpcs.xml tests/acceptance

@@ -124,7 +124,7 @@ class WopiControllerTest extends \Test\TestCase {
 	}
 
 	public function testConstructor() {
-		// NOTE: Wopi controller implements protocol is similar fashion to https://github.com/owncloud/wopi
+		// NOTE: Wopi controller implements the WOPI protocol like other WOPI hosts
 		//  and code heavily overlaps, it is ok to test only constructor for the moment
 		$this->assertInstanceOf(WopiController::class, $this->wopiController);
 	}

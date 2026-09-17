@@ -80,4 +80,17 @@ class AppConfigTest extends TestCase {
 
 		$this->assertSame($expectedResult, $this->appConfig->enterpriseFeaturesEnabled());
 	}
+
+	/**
+	 * edit_groups wird an explode() gegeben; null wäre unter PHP 8.4 eine
+	 * Deprecation bei jedem Öffnen eines Dokuments.
+	 */
+	public function testEditGroupsDefaultsToEmptyString() {
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('richdocuments', 'edit_groups', '')
+			->willReturnArgument(2);
+
+		$this->assertSame('', $this->appConfig->getAppValue('edit_groups'));
+	}
 }

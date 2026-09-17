@@ -23,7 +23,9 @@ können. owncloud.online liefert dabei die Datei über das WOPI-Protokoll aus
 
 ## Voraussetzungen
 
-- owncloud.online 11.x und PHP 8.4 (siehe `appinfo/info.xml`).
+- owncloud.online Redesign 11.1 oder neuer und PHP 8.4 (siehe
+  `appinfo/info.xml`). Der Redesign-Kern erlaubt Formularziele nur nach
+  Freigabe; die App gibt die Adresse des Collabora-Servers dafür frei.
 - Ein erreichbarer Collabora-Online-Server, der unter
   `<adresse>/hosting/discovery` eine gültige WOPI-Discovery-XML ausliefert.
 - Ein eingerichteter Cron-Lauf, damit der Hintergrundjob
@@ -175,8 +177,8 @@ Kennung `richdocuments`. Einzige Ausnahme ist die Meldung über eine unbekannte
 ## Herkunft
 
 Diese App geht auf richdocuments von Collabora Productivity zurück, aufbauend
-auf Arbeiten von Frank Karlitschek und Victor Dubiniuk und gepflegt von der
-ownCloud GmbH. Lizenz: AGPL-3.0.
+auf Arbeiten von Frank Karlitschek und Victor Dubiniuk. Lizenz: AGPL-3.0;
+die Urheberrechtsvermerke in den Quelldateien bleiben unverändert.
 
 Angepasst von der BW-Tech GmbH für owncloud.online und PHP 8.4.
 
