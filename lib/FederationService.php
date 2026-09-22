@@ -21,6 +21,7 @@
  */
 namespace OCA\Richdocuments;
 
+use OCP\IConfig;
 use OCP\ILogger;
 use OCP\Http\Client\IClientService;
 use OCP\IURLGenerator;
@@ -41,14 +42,21 @@ class FederationService {
 	 */
 	private $httpClient;
 
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
 	public function __construct(
 		ILogger $logger,
 		IURLGenerator $urlGenerator,
-		IClientService $httpClient
+		IClientService $httpClient,
+		IConfig $config
 	) {
 		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 		$this->httpClient = $httpClient;
+		$this->config = $config;
 	}
 
 	/**
@@ -119,10 +127,46 @@ class FederationService {
 	 * @param string $remote a remote url
 	 * @return bool indicating if given remote is allowed server
 	 */
-	public function isServerAllowed($remote) {
-		// TODO: implement check for trusted server, for a moment all trusted
+	/**
+	 * Darf mit diesem entfernten Server foederiert werden?
+	 *
+	 * Bis hierher stand hier ein "for a moment all trusted" und ein
+	 * return true. Das ist keine Kleinigkeit: getWopiForToken() schickt den
+	 * WOPI-Zugriffstoken per POST an
+	 * "<remote>/ocs/v2.php/apps/richdocuments/api/v1/federation". Ohne Pruefung
+	 * geht der Token an jeden Server, den eine Anfrage benennt - der Server
+	 * holt also auf Zuruf eine fremde Adresse ab und gibt dabei ein
+	 * Zugriffsmerkmal preis.
+	 *
+	 * Die Liste steht in 'richdocuments.federation_allowlist' und enthaelt
+	 * reine Domainnamen ohne Schema. Ist sie leer oder nicht gesetzt, ist
+	 * keine Foederation erlaubt - abgelehnt wird im Zweifel, nicht zugelassen.
+	 *
+	 * Bekannte Grenze: Installationen unter einem Pfad
+	 * (cloud.example.com/owncloud) werden nicht unterstuetzt; der Pfadanteil
+	 * verhindert die Uebereinstimmung mit einem reinen Domaineintrag.
+	 *
+	 * Uebernommen aus owncloud/richdocuments.
+	 *
+	 * @param string $remote a remote url
+	 * @return bool
+	 */
+	public function isServerAllowed($remote): bool {
+		$allowlist = $this->config->getSystemValue('richdocuments.federation_allowlist', []);
 
-		return true;
+		if (!\is_array($allowlist) || empty($allowlist)) {
+			return false;
+		}
+
+		$domain = \rtrim((string)\preg_replace('|^https?://|', '', (string)$remote), '/');
+
+		foreach ($allowlist as $entry) {
+			if ($domain === \rtrim((string)$entry, '/')) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
