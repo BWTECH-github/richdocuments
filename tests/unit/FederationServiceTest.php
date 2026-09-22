@@ -23,6 +23,7 @@ namespace OCA\Richdocuments\Tests;
 
 use OCA\Richdocuments\FederationService;
 use OCP\Http\Client\IClientService;
+use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IURLGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -51,6 +52,13 @@ class FederationServiceTest extends TestCase {
 	private $urlGenerator;
 
 	/**
+	 * The IConfig instance.
+	 *
+	 * @var IConfig|MockObject
+	 */
+	private $config;
+
+	/**
 	 * @var FederationService|MockObject The discovery service mock object.
 	 */
 	private $federationService;
@@ -61,12 +69,75 @@ class FederationServiceTest extends TestCase {
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->logger = $this->createMock(ILogger::class);
 		$this->httpClient = $this->createMock(IClientService::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->federationService = new FederationService(
 			$this->logger,
 			$this->urlGenerator,
-			$this->httpClient
+			$this->httpClient,
+			$this->config
 		);
+	}
+
+	/**
+	 * Bis zu dieser Fassung stand in isServerAllowed() ein "for a moment all
+	 * trusted" und ein return true. getWopiForToken() schickt den
+	 * WOPI-Zugriffstoken an den benannten Server - ohne Pruefung also an
+	 * jeden. Die Liste entscheidet das jetzt, und sie entscheidet im Zweifel
+	 * gegen die Foederation.
+	 */
+	public function serverAllowedProvider(): array {
+		return [
+			// Keine Liste: keine Foederation. Das ist der Standard.
+			'no allowlist at all' => [[], 'https://remote.example.test', false],
+			'allowlist is not an array' => ['remote.example.test', 'https://remote.example.test', false],
+
+			'listed domain over https' => [['remote.example.test'], 'https://remote.example.test', true],
+			'listed domain over http' => [['remote.example.test'], 'http://remote.example.test', true],
+			'listed domain without scheme' => [['remote.example.test'], 'remote.example.test', true],
+			'trailing slash on either side' => [['remote.example.test/'], 'https://remote.example.test/', true],
+
+			// Die Faelle, um die es geht.
+			'unlisted domain' => [['remote.example.test'], 'https://evil.example.test', false],
+			'subdomain of a listed domain' => [['example.test'], 'https://evil.example.test', false],
+			'listed domain as a prefix' => [['remote.example.test'], 'https://remote.example.test.evil.test', false],
+			'listed domain as a suffix' => [['remote.example.test'], 'https://evil.test/remote.example.test', false],
+			'userinfo pointing elsewhere' => [['remote.example.test'], 'https://remote.example.test@evil.test', false],
+			'empty remote' => [['remote.example.test'], '', false],
+		];
+	}
+
+	/**
+	 * @dataProvider serverAllowedProvider
+	 *
+	 * @param mixed $allowlist
+	 */
+	public function testIsServerAllowed($allowlist, string $remote, bool $expected): void {
+		$this->config->method('getSystemValue')
+			->willReturnCallback(
+				static function (string $key, $default = null) use ($allowlist) {
+					return $key === 'richdocuments.federation_allowlist' ? $allowlist : $default;
+				}
+			);
+
+		$this->assertSame($expected, $this->federationService->isServerAllowed($remote));
+	}
+
+	/**
+	 * Und der Punkt, auf den es ankommt: ohne Erlaubnis geht kein Token
+	 * hinaus. Der HTTP-Client darf gar nicht erst angefasst werden.
+	 */
+	public function testNoTokenLeavesForAnUnlistedServer(): void {
+		$this->config->method('getSystemValue')
+			->willReturnCallback(
+				static fn (string $key, $default = null) => $key === 'richdocuments.federation_allowlist'
+					? ['remote.example.test']
+					: $default
+			);
+		$this->httpClient->expects($this->never())->method('newClient');
+
+		$this->assertNull($this->federationService->getWopiForToken('https://evil.example.test', 'secret-access-token'));
+		$this->assertSame('', $this->federationService->getRemoteWopiSrc('https://evil.example.test'));
 	}
 
 	public function dataGenerateFederatedCloudID() {

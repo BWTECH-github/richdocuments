@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 
+## [4.3.5] - 2026-09-22
+
+### Fixed
+
+- **Sicherheit:** `FederationService::isServerAllowed()` war nie
+  ausprogrammiert - im Rumpf stand `// TODO: implement check for trusted
+  server, for a moment all trusted` und ein `return true`.
+
+  Das ist keine Formsache: `getWopiForToken()` schickt den
+  WOPI-Zugriffstoken per POST an
+  `<remote>/ocs/v2.php/apps/richdocuments/api/v1/federation`, und
+  `getRemoteWopiSrc()` ruft dieselbe Adresse per GET ab. Ohne Pruefung ging
+  der Token an jeden Server, den eine Anfrage benannte: der eigene Server
+  holte auf Zuruf eine fremde Adresse ab und gab dabei ein Zugriffsmerkmal
+  preis.
+
+  Die Pruefung ist jetzt die von owncloud/richdocuments uebernommene: der
+  Domainname des Gegenuebers muss in `richdocuments.federation_allowlist`
+  stehen.
+
+### Changed
+
+- **Zu beachten beim Aktualisieren:** Ist
+  `richdocuments.federation_allowlist` leer oder nicht gesetzt, ist
+  **keine** Foederation erlaubt. Das ist der sichere Standard und entspricht
+  owncloud/richdocuments - wer Foederation nutzt, traegt die Gegenstellen
+  vorher ein:
+
+  ```bash
+  occ config:system:set richdocuments.federation_allowlist 0 \
+      --value cloud.partner.example
+  ```
+
+  Eintraege sind reine Domainnamen ohne Schema. Installationen unter einem
+  Pfad (`cloud.example.com/owncloud`) werden nicht unterstuetzt; der
+  Pfadanteil verhindert die Uebereinstimmung mit einem reinen Domaineintrag.
+
 ## [4.3.3] - 2026-08-13
 
 ### Changed
