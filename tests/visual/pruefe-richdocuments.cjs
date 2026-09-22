@@ -192,11 +192,26 @@ async function colorboxZu(seite) {
 	pruefe('Collabora lädt das Dokument', geladen, editor ? JSON.stringify(await editor.evaluate(() => window.__cool).catch(() => null)) : '');
 
 	if (geladen) {
+		// Editor unter der Kopfleiste und rechts der Seitenleiste, nichts verdeckt
 		const lage = await editor.evaluate(() => {
 			const r = document.getElementById('loleafletframe').getBoundingClientRect();
-			return { breite: Math.round(r.width), hoehe: Math.round(r.height) };
+			const kopf = document.getElementById('header');
+			const leiste = document.getElementById('oco-sidebar');
+			const k = kopf ? kopf.getBoundingClientRect() : null;
+			const l = leiste ? leiste.getBoundingClientRect() : null;
+			return {
+				x: Math.round(r.x), y: Math.round(r.y), breite: Math.round(r.width), hoehe: Math.round(r.height),
+				kopfUnten: k ? Math.round(k.bottom) : 0, leisteRechts: l && l.width ? Math.round(l.right) : 0,
+				fensterB: window.innerWidth, fensterH: window.innerHeight,
+			};
 		});
-		pruefe('Editor füllt die Seite', lage.breite > 1000 && lage.hoehe > 600, JSON.stringify(lage));
+		pruefe('Editor liegt unter der Kopfleiste und rechts der Seitenleiste', lage.y >= lage.kopfUnten - 1 && lage.x >= lage.leisteRechts - 1
+			&& lage.x + lage.breite <= lage.fensterB + 1 && lage.y + lage.hoehe <= lage.fensterH + 1 && lage.hoehe > 600 && lage.breite > 900, JSON.stringify(lage));
+		const akzent = await editor.evaluate(() => {
+			const f = document.querySelector('#loleafletform input[name=css_variables]');
+			return f ? f.value : '';
+		});
+		pruefe('Collabora-Akzentfarbe aus dem Token (nicht Weiß)', /--co-primary-element=#00806b/i.test(akzent), akzent);
 
 		// Text einfügen und speichern (WOPI-Nachrichten wie ein Host)
 		await editor.evaluate((text) => {
@@ -214,6 +229,30 @@ async function colorboxZu(seite) {
 			inhalt = 'Fehler: ' + e.message;
 		}
 		pruefe('Speichern: Text steht in der Datei', gespeichert && inhalt.indexOf(TEXT) !== -1, 'Action_Save_Resp=' + gespeichert + ', content.xml enthält Text: ' + (inhalt.indexOf(TEXT) !== -1));
+
+		// "Speichern unter": Collabora meldet UI_SaveAs, der Host fragt nach dem Namen
+		await rahmen.evaluate(() => window.parent.postMessage(JSON.stringify({ MessageId: 'UI_SaveAs', SendTime: Date.now(), Values: {} }), '*'));
+		await editor.waitForFunction(() => Array.from(document.querySelectorAll('.oc-dialog')).some((d) => d.getClientRects().length > 0), null, { timeout: 10000 }).catch(() => {});
+		const speichernUnter = await editor.evaluate(() => {
+			const d = Array.from(document.querySelectorAll('.oc-dialog')).find((x) => x.getClientRects().length > 0);
+			if (!d) {
+				return null;
+			}
+			const knoepfe = Array.from(d.querySelectorAll('.oc-dialog-buttonrow button')).map((b) => (b.classList.contains('primary') ? '*' : '') + b.textContent.trim());
+			const kreuz = d.querySelector('.oc-dialog-close');
+			return { knoepfe, kreuz: kreuz ? kreuz.textContent.trim() : null };
+		});
+		pruefe('Speichern unter: "Speichern" steht auf dem Bestätigen-Knopf', !!speichernUnter && speichernUnter.knoepfe.indexOf('*Speichern') !== -1 && speichernUnter.knoepfe.indexOf('Abbrechen') !== -1 && speichernUnter.kreuz !== 'Abbrechen', JSON.stringify(speichernUnter));
+		if (speichernUnter) {
+			await editor.locator('.oc-dialog:visible input[type=text]').first().fill('kopie.odt').catch(() => {});
+			await editor.locator('.oc-dialog:visible .oc-dialog-buttonrow button.primary').first().click({ timeout: 5000 }).catch(() => {});
+			let kopie = 0;
+			for (let i = 0; i < 30 && kopie !== 207; i++) {
+				await editor.waitForTimeout(1000);
+				kopie = await seite.evaluate(async () => (await fetch(OC.linkToRemoteBase('dav') + '/files/admin/Office-Probe/kopie.odt', { method: 'PROPFIND', headers: { requesttoken: OC.requestToken, Depth: '0' } })).status);
+			}
+			pruefe('Speichern unter legt die Kopie an', kopie === 207, kopie);
+		}
 
 		// Schließen (wie der Schließen-Knopf von Collabora)
 		await Promise.all([
@@ -280,7 +319,35 @@ async function colorboxZu(seite) {
 	await seite.goto(BASIS + '/index.php/apps/files/', { waitUntil: 'load' });
 	const navigation = await seite.evaluate(() => document.querySelectorAll('a[href*="richdocuments/documents.php/index"]').length);
 	pruefe('Navigation: Eintrag Office vorhanden', navigation > 0, navigation);
+	// genug Dokumente, dass die Übersicht über einen Bildschirm hinausgeht
+	await seite.evaluate(async () => {
+		const h = { requesttoken: OC.requestToken, 'Content-Type': 'application/x-www-form-urlencoded' };
+		for (let i = 1; i <= 22; i++) {
+			await fetch(OC.generateUrl('apps/richdocuments/ajax/documents/create'), {
+				method: 'POST', headers: h,
+				body: new URLSearchParams({ mimetype: 'application/vnd.oasis.opendocument.text', filename: 'viele-' + String(i).padStart(2, '0') + '.odt', dir: '/Office-Probe' }),
+			});
+		}
+	});
 	await seite.goto(BASIS + '/index.php/apps/richdocuments/documents.php/index', { waitUntil: 'load' });
+	await seite.waitForSelector('.documentslist li.document:not(.template) a', { timeout: 30000 }).catch(() => {});
+	await seite.waitForTimeout(1000);
+	const vorRollen = await seite.evaluate(() => {
+		const k = Array.from(document.querySelectorAll('.documentslist li.document:not(.template)')).filter((l) => l.getClientRects().length);
+		return { kacheln: k.length, letzteUnten: k.length ? Math.round(k[k.length - 1].getBoundingClientRect().bottom) : 0, fenster: window.innerHeight };
+	});
+	await seite.mouse.move(800, 500);
+	for (let i = 0; i < 6; i++) {
+		await seite.mouse.wheel(0, 800);
+		await seite.waitForTimeout(150);
+	}
+	const nachRollen = await seite.evaluate(() => {
+		const k = Array.from(document.querySelectorAll('.documentslist li.document:not(.template)')).filter((l) => l.getClientRects().length);
+		const r = k.length ? k[k.length - 1].getBoundingClientRect() : null;
+		return { letzteOben: r ? Math.round(r.top) : null, letzteUnten: r ? Math.round(r.bottom) : null, fenster: window.innerHeight };
+	});
+	pruefe('Office-Übersicht rollt: letzte Kachel erreichbar', vorRollen.letzteUnten > vorRollen.fenster && nachRollen.letzteUnten !== null && nachRollen.letzteUnten <= nachRollen.fenster && nachRollen.letzteOben >= 0,
+		JSON.stringify({ vorRollen, nachRollen }));
 	await seite.waitForSelector('.documentslist li.document:not(.template) a', { timeout: 30000 }).catch(() => {});
 	const liste = await seite.evaluate(() => Array.from(document.querySelectorAll('.documentslist li.document:not(.template)'))
 		.filter((li) => li.getClientRects().length > 0)
@@ -329,6 +396,63 @@ async function colorboxZu(seite) {
 			seite.waitForResponse((r) => /setAdminSettings/.test(r.url()), { timeout: 15000 }).catch(() => {}),
 			seite.uncheck('#enable_zotero-richdocuments'),
 		]);
+	}
+
+	// Öffnen von der Startseite: Link openfile=…&back=dashboard, mit aktivem
+	// Popup-Blocker wie im echten Browser (Playwright schaltet ihn sonst ab)
+	{
+		const echt = await chromium.launch({ ignoreDefaultArgs: ['--disable-popup-blocking'] });
+		const k = await echt.newContext({ locale: 'de-DE', viewport: { width: 1440, height: 900 } });
+		await k.addInitScript(MITSCHNITT);
+		const s = await k.newPage();
+		await s.goto(BASIS + '/index.php/login', { waitUntil: 'domcontentloaded' });
+		await s.fill('#user', 'admin');
+		await s.fill('#password', PASSWORT);
+		await Promise.all([s.waitForNavigation({ timeout: 60000 }).catch(() => {}), s.click('#submit, button[type=submit], input[type=submit]')]);
+		const ziel = await editorSeite(s, () => s.goto(BASIS + '/index.php/apps/files/?dir=%2FOffice-Probe&scrollto=probe.odt&openfile=probe.odt&back=dashboard', { waitUntil: 'load' }), /richdocuments\/documents\.php/);
+		const r = ziel ? await editorRahmen(ziel) : null;
+		const offen = r ? await warteAufNachricht(ziel, '^App_LoadingStatus:Document_Loaded') : false;
+		pruefe('Startseite (openfile, Popup-Blocker aktiv): Editor öffnet', offen, ziel ? ziel.url().replace(BASIS, '') : s.url().replace(BASIS, ''));
+		if (offen) {
+			await Promise.all([
+				ziel.waitForURL(/apps\/dashboard/, { timeout: 30000 }).catch(() => {}),
+				r.evaluate(() => window.parent.postMessage(JSON.stringify({ MessageId: 'UI_Close', SendTime: Date.now(), Values: {} }), '*')),
+			]);
+			pruefe('Startseite: Schließen führt zurück zur Startseite', /apps\/dashboard/.test(ziel.url()), ziel.url().replace(BASIS, ''));
+			const leiste = await ziel.evaluate(() => { const t = document.querySelector('.oco-tabbar'); return t ? getComputedStyle(t).display : 'fehlt'; });
+			pruefe('Desktop: mobile Reiterleiste bleibt ausgeblendet', leiste === 'none' || leiste === 'fehlt', leiste);
+		}
+		await echt.close();
+	}
+
+	// Telefon: Editor endet über der Reiterleiste
+	{
+		const dateiId = await seite.evaluate(async () => {
+			const r = await fetch(OC.linkToRemoteBase('dav') + '/files/admin/Office-Probe/probe.odt', {
+				method: 'PROPFIND', headers: { requesttoken: OC.requestToken, Depth: '0', 'Content-Type': 'application/xml' },
+				body: '<?xml version="1.0"?><d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns"><d:prop><oc:fileid/></d:prop></d:propfind>',
+			});
+			return ((await r.text()).match(/<oc:fileid>(\d+)<\/oc:fileid>/) || [])[1];
+		});
+		const k = await browser.newContext({ locale: 'de-DE', viewport: { width: 390, height: 800 } });
+		await k.addInitScript(MITSCHNITT);
+		const s = await k.newPage();
+		await s.goto(BASIS + '/index.php/login', { waitUntil: 'domcontentloaded' });
+		await s.fill('#user', 'admin');
+		await s.fill('#password', PASSWORT);
+		await Promise.all([s.waitForNavigation({ timeout: 60000 }).catch(() => {}), s.click('#submit, button[type=submit], input[type=submit]')]);
+		await s.goto(BASIS + '/index.php/apps/richdocuments/documents.php/index?fileId=' + dateiId + '&dir=%2FOffice-Probe', { waitUntil: 'load' });
+		const r = await editorRahmen(s);
+		const offen = r ? await warteAufNachricht(s, '^App_LoadingStatus:Document_Loaded') : false;
+		const lage = await s.evaluate(() => {
+			const f = document.getElementById('loleafletframe');
+			const t = document.querySelector('.oco-tabbar');
+			const fr = f ? f.getBoundingClientRect() : null;
+			const tr = t && getComputedStyle(t).display !== 'none' ? t.getBoundingClientRect() : null;
+			return { rahmenUnten: fr ? Math.round(fr.bottom) : null, rahmenOben: fr ? Math.round(fr.top) : null, leisteOben: tr ? Math.round(tr.top) : null, fenster: window.innerHeight };
+		});
+		pruefe('Telefon: Editor endet über der Reiterleiste', offen && lage.rahmenUnten !== null && (lage.leisteOben === null || lage.rahmenUnten <= lage.leisteOben + 1) && lage.rahmenOben >= 0, JSON.stringify(lage));
+		await k.close();
 	}
 
 	// ohne eingerichteten Server: Meldung im Rahmen der Oberfläche statt Absturz

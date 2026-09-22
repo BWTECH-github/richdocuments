@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [5.0.0] - 2026-09-17
+## [5.0.0] - 2026-09-22
 
 Redesign-Linie (owncloud.online Redesign 11.1). Nur im Zweig `redesign`.
 Im Redesign-Kern mit echtem Collabora Online (CODE) Ende zu Ende geprüft
-(tests/visual/pruefe-richdocuments.cjs, 20/20).
+(tests/visual/pruefe-richdocuments.cjs, 28/28; gegen den Stand vom 17.09.
+22/28).
 
 ### Fixed
 
@@ -21,6 +22,24 @@ Im Redesign-Kern mit echtem Collabora Online (CODE) Ende zu Ende geprüft
   jedem Öffnen eines Dokuments).
 - Office-Übersicht ohne Dokument: fehlende Vorlagenschlüssel ("Undefined array
   key") und leerer Größenhinweis beim Hochladen ("max. ").
+- Editorfläche in der Redesign-Schale: Sie begann 45 px unter dem oberen
+  Rand über der ganzen Breite, schnitt die 64 px hohe Kopfleiste samt Logo ab
+  und lag über der Seitenleiste, deren Links unsichtbar per Tab erreichbar
+  blieben. Jetzt unter der Kopfleiste und rechts der Seitenleiste; auf
+  Telefonen endet sie über der Reiterleiste statt darunter.
+- Office-Übersicht rollte nicht: ab etwa dem 15. Dokument waren Kacheln nicht
+  erreichbar (der Inhaltsbereich der Schale schneidet ab). Die Kachelliste
+  rollt jetzt selbst.
+- "Speichern unter": Die Beschriftungen wurden per Position gesetzt; im
+  Redesign ist das Schließen-Kreuz ebenfalls ein Knopf, "Speichern" landete
+  auf dem Ablehnen-Knopf und verwarf die Kopie. Jetzt über die Knopfleiste.
+- Collabora-Akzentfarbe kam aus dem Hintergrund der Kopfleiste (im Redesign
+  Weiß). Jetzt aus dem Token `--oco-teal-ink`, sonst wie bisher.
+- Öffnen von der Startseite (`openfile`): window.open ohne Nutzeraktion wird
+  vom Browser blockiert; dann öffnet der Editor im selben Tab. `back=dashboard`
+  wird durchgereicht, Schließen führt zur Startseite zurück.
+- Schließen des Editors blendete per `$('footer,nav').show()` auch die mobile
+  Reiterleiste auf dem Desktop ein; jetzt nur die Fußzeile.
 
 ### Changed
 

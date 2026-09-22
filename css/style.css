@@ -585,3 +585,77 @@ document p{
 		display: none;
 	}
 }
+
+/* ---------------------------------------------------------------------------
+ * Redesign-Schale (body.oco-shell)
+ *
+ * Die Editorfläche war auf die alte 45-px-Kopfleiste über der ganzen Breite
+ * ausgelegt. In der Schale schnitt sie die 64 px hohe Kopfleiste samt Logo
+ * ab und lag über der Seitenleiste, deren Links unsichtbar in der
+ * Tab-Reihenfolge blieben. Jetzt unter der Kopfleiste und rechts der
+ * Seitenleiste; auf Telefonen über der Reiterleiste statt darunter.
+ * ------------------------------------------------------------------------ */
+body.oco-shell #mainContainer,
+body.oco-shell #revViewerContainer {
+	top: var(--oco-topbar-height, 64px);
+	left: var(--oco-sidebar-width, 244px);
+	right: 0;
+	width: auto;
+}
+
+body.oco-shell #revPanelContainer,
+body.oco-shell #documents-overlay,
+body.oco-shell #documents-overlay-below {
+	top: var(--oco-topbar-height, 64px);
+}
+
+body.oco-shell #documents-overlay,
+body.oco-shell #documents-overlay-below {
+	left: var(--oco-sidebar-width, 244px);
+	width: auto;
+	height: auto;
+	bottom: 0;
+}
+
+/* rechts bleibt der Abstand der unteren Lage (72 px, siehe oben) erhalten */
+body.oco-shell #documents-overlay {
+	right: 0;
+}
+
+/* Office-Übersicht: #content-wrapper schneidet in der Schale ab, die
+   Kachelliste rollt deshalb selbst (vorher ab etwa dem 15. Dokument
+   unerreichbar) */
+body.oco-shell #documents-content {
+	height: 100%;
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+/* ab hier ist die Seitenleiste ausgeklappt nur über den Menüknopf da */
+@media (max-width: 1023px) {
+	body.oco-shell #mainContainer,
+	body.oco-shell #revViewerContainer,
+	body.oco-shell #documents-overlay,
+	body.oco-shell #documents-overlay-below {
+		left: 0;
+	}
+}
+
+/* bis 768 px blendet die App die Kopfleiste aus (siehe oben): kein Abstand */
+@media (max-width: 768px) {
+	body.oco-shell #mainContainer,
+	body.oco-shell #revViewerContainer,
+	body.oco-shell #revPanelContainer {
+		top: 0;
+	}
+}
+
+/* Telefon: die Reiterleiste des Redesigns bleibt sichtbar, der Editor endet
+   darüber */
+@media (max-width: 767px) {
+	body.oco-shell #mainContainer,
+	body.oco-shell #revViewerContainer,
+	body.oco-shell #revPanelContainer {
+		bottom: var(--oco-tabbar-height, 84px);
+	}
+}

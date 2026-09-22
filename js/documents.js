@@ -171,6 +171,7 @@ var documentsMain = {
 	renderComplete: false, // false till page is rendered with all required data about the document(s)
 	toolbar : '<div id="ocToolbar"><div id="ocToolbarInside"></div><span id="toolbar" class="claro"></span></div>',
 	returnToDir : null, // directory where we started from in the 'Files' app
+	returnToDashboard : false, // opened from the start page (back=dashboard)
 	$deferredVersionRestoreAck: null,
 	wopiClientFeatures: null,
 
@@ -535,7 +536,10 @@ var documentsMain = {
 						                  t('richdocuments', 'New filename'),
 						                  false).then(function() {
 							                var $dialog = $('.oc-dialog:visible');
-							                var $buttons = $dialog.find('button');
+							                // Nur die Knopfleiste: Im Redesign ist das
+							                // Schließen-Kreuz ebenfalls ein <button> und stand
+							                // vorn – "Speichern" landete auf dem Ablehnen-Knopf.
+							                var $buttons = $dialog.find('.oc-dialog-buttonrow button');
 							                $buttons.eq(0).text(t('richdocuments', 'Cancel'));
 							                $buttons.eq(1).text(t('richdocuments', 'Save'));
 							                });
@@ -633,6 +637,11 @@ var documentsMain = {
 		var dir = getURLParameter('dir');
 		if (dir != 'null')
 			documentsMain.returnToDir = dir;
+
+		// Von der Startseite geöffnet (…&back=dashboard): Schließen führt
+		// dorthin zurück wie bei den anderen Betrachtern
+		if (getURLParameter('back') === 'dashboard')
+			documentsMain.returnToDashboard = true;
 
 		var shareToken = getURLParameter('shareToken');
 		if (shareToken != 'null') {
@@ -788,7 +797,9 @@ var documentsMain = {
 		documentsMain.UI.hideEditor();
 
 		documentsMain.show();
-		$('footer,nav').show();
+		// nur die Fußzeile: "nav" traf im Redesign auch die mobile Reiterleiste
+		// und holte sie per Inline-Stil auf den Desktop
+		$('footer').show();
 	},
 
 	onClose: function() {
@@ -801,11 +812,14 @@ var documentsMain = {
 		$(window).off('unload');
 		parent.location.hash = "";
 
-		$('footer,nav').show();
+		$('footer').show();
 		documentsMain.UI.hideEditor();
 		$('#ocToolbar').remove();
 
-		if (documentsMain.returnToDir) {
+		if (documentsMain.returnToDashboard) {
+			documentsMain.overlay.documentOverlay('show');
+			window.location = OC.generateUrl('apps/dashboard/');
+		} else if (documentsMain.returnToDir) {
 			documentsMain.overlay.documentOverlay('show');
 			window.location = OC.generateUrl('apps/files?dir={dir}', {dir: documentsMain.returnToDir}, {escape: false});
 		} else if (documentsMain.returnToServer) {
@@ -838,8 +852,14 @@ var documentsMain = {
 
 //init
 var generateCSSVarTokens = function() {
-	var headerBg = $('#header').css('background-color');
-	return '--co-primary-element=' + headerBg + ';';
+	// Akzentfarbe für Collabora: im Redesign aus dem Token (Kopfleiste ist
+	// dort weiß – Weiß als Primärfarbe machte Hervorhebungen unsichtbar);
+	// ohne Token wie bisher der Hintergrund der Kopfleiste
+	var farbe = $.trim(window.getComputedStyle(document.documentElement).getPropertyValue('--oco-teal-ink'));
+	if (!farbe) {
+		farbe = $('#header').css('background-color');
+	}
+	return '--co-primary-element=' + farbe + ';';
 };
 
 var Files = Files || {

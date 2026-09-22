@@ -90,12 +90,34 @@ var odfViewer = {
 			url = OC.generateUrl('apps/richdocuments/documents.php/index?fileId={file_id}', {file_id: fileId});
 		}
 
-		if (OC.appConfig.richdocuments.openInNewTab === true) {
-			window.open(url,'_blank');
-		} else {
-			window.location = url;
-		}
+		odfViewer._openUrl(url);
 
+	},
+
+	/**
+	 * Öffnet den Editor im neuen Tab (Einstellung open_in_new_tab) oder im
+	 * selben Tab.
+	 *
+	 * Ohne Nutzeraktion blockiert der Browser window.open – so beim Öffnen von
+	 * der Startseite aus: Dort lädt erst die Dateiliste, dann startet die
+	 * Standardaktion, der Klick ist da längst "verbraucht". Der Editor öffnete
+	 * dann gar nicht, nur der Hinweis "Pop-up blockiert" erschien. In diesem
+	 * Fall und wenn das Popup trotzdem blockiert wird: im selben Tab öffnen.
+	 */
+	_openUrl : function(url) {
+		// Kam der Nutzer von der Startseite (openfile=…&back=dashboard), führt
+		// das Schließen des Editors dorthin zurück
+		if (/[?&]back=dashboard(&|$)/.test(window.location.search)) {
+			url += (url.indexOf('?') === -1 ? '?' : '&') + 'back=dashboard';
+		}
+		var neuerTab = OC.appConfig.richdocuments.openInNewTab === true;
+		if (neuerTab && navigator.userActivation && !navigator.userActivation.isActive) {
+			neuerTab = false;
+		}
+		if (neuerTab && window.open(url, '_blank')) {
+			return;
+		}
+		window.location = url;
 	},
 
 	onOpenWithSecureView : function(fileName, context){
@@ -108,11 +130,7 @@ var odfViewer = {
 		} else {
 			url = OC.generateUrl('apps/richdocuments/documents.php/index?fileId={file_id}&enforceSecureView={enforceSecureView}', {file_id: fileId, enforceSecureView: "true" });
 		}
-		if (OC.appConfig.richdocuments.openInNewTab === true) {
-			window.open(url,'_blank');
-		} else {
-			window.location = url;
-		}
+		odfViewer._openUrl(url);
 
 	},
 
