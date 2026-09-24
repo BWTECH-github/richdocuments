@@ -36,6 +36,9 @@ class AppConfig {
 		// die vorgesehene Meldung anzuzeigen.
 		'wopi_url' => '',
 		'test_wopi_url' => '',
+		// Ohne Standard landete null in explode() (Deprecation bei jedem Öffnen
+		// eines Dokuments, solange keine Bearbeitungsgruppen gesetzt sind).
+		'edit_groups' => '',
 	];
 
 	private $config;

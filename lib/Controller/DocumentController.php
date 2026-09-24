@@ -244,8 +244,21 @@ class DocumentController extends Controller {
 				'path' => $docinfo['path']
 			];
 		} else {
-			// base template
-			$docRetVal = [];
+			// base template: die Vorlage liest diese Schlüssel auch ohne Dokument
+			// (sonst "Undefined array key" und ein leerer Upload-Hinweis "max. ")
+			$maxUploadFilesize = \OCP\Util::maxUploadFilesize("/");
+			$docRetVal = [
+				'uploadMaxFilesize' => $maxUploadFilesize,
+				'uploadMaxHumanFilesize' => \OCP\Util::humanFileSize($maxUploadFilesize),
+				'title' => '',
+				'fileId' => '',
+				'version' => '',
+				'sessionId' => '',
+				'access_token' => '',
+				'access_token_ttl' => '',
+				'urlsrc' => '',
+				'path' => ''
+			];
 		}
 
 		// Handle general response
