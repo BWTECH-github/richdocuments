@@ -211,6 +211,11 @@ class DocumentControllerTest extends \Test\TestCase {
 		$uid = 'richdocuments-overview-test';
 		$userManager = \OC::$server->getUserManager();
 		$user = $userManager->get($uid) ?? $userManager->createUser($uid, 'Overview-Test-2026!');
+		if (!$user instanceof \OCP\IUser) {
+			// createUser() liefert false (Kennwortregel, schreibgeschütztes
+			// Backend): dann klar scheitern statt später mit "delete() on bool"
+			$this->fail("Testnutzer '$uid' konnte nicht angelegt werden");
+		}
 		self::loginAsUser($uid);
 		try {
 			$this->discoveryService->method('getWopiUrl')->willReturn('https://office.example:9980');
