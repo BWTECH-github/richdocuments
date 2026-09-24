@@ -240,7 +240,10 @@ var documentsMain = {
 			'<div id="revPanelHeader">' +
 			'<h2>Revision History</h2>' +
 			'<span>{{filename}}</span>' +
-			'<a class="closeButton" aria-label="{{closeLabel}}"><img src="{{closeButtonUrl}}" alt="" width="22" height="22"></a>' +
+			// Der Anker hat kein href und ist damit kein Verweis; aria-label wäre dort
+			// unzulässig. role="button" plus tabindex macht das Schließen-Symbol zu einer
+			// echten, mit der Tastatur erreichbaren Schaltfläche und erlaubt die Beschriftung.
+			'<a class="closeButton" role="button" tabindex="0" aria-label="{{closeLabel}}"><img src="{{closeButtonUrl}}" alt="" width="22" height="22"></a>' +
 			'</div>' +
 			'<div id="revisionsContainer" class="loleaflet-font">' +
 			'<ul></ul>' +
@@ -248,7 +251,9 @@ var documentsMain = {
 			'</div>',
 
 		revHistoryItemTemplate: '<li>' +
-			'<a class="versionPreview"><span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span></a>' +
+			// Ebenfalls ein Anker ohne href: er wählt eine Revision aus, ist also eine
+			// Schaltfläche. Der sichtbare Zeitstempel bleibt der zugängliche Name.
+			'<a class="versionPreview" role="button" tabindex="0"><span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span></a>' +
 			'</li>',
 
 		/* Previous window title */
@@ -347,6 +352,16 @@ var documentsMain = {
 			});
 			$('#revViewerContainer').prepend(revHistoryContainer);
 
+			// Ein Anker ohne href löst bei Eingabe- und Leertaste keinen Klick aus.
+			// Die oben zugesagte Schaltflächen-Rolle wird deshalb hier bedient – einmalig
+			// beim Aufbau des Panels, denn showViewer() läuft bei jedem Revisionsklick neu.
+			$('#revPanelHeader .closeButton').on('keydown', function(e) {
+				if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+					e.preventDefault();
+					documentsMain.onCloseViewer();
+				}
+			});
+
 			// show loading screen
 			$('#revPanelContainer').hide();
 			documentsMain.overlay.documentOverlay('show');
@@ -389,6 +404,14 @@ var documentsMain = {
 				// mark only current <li> as active
 				$(e.currentTarget.parentElement.parentElement).find('li').removeClass('active');
 				$(e.currentTarget.parentElement).addClass('active');
+			});
+
+			// Tastaturbedienung für die Revisionseinträge, siehe role="button" oben.
+			$('#revisionsContainer').on('keydown', '.versionPreview', function(e) {
+				if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+					e.preventDefault();
+					$(e.currentTarget).click();
+				}
 			});
 		},
 
