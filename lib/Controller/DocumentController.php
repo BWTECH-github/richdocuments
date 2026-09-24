@@ -246,10 +246,7 @@ class DocumentController extends Controller {
 		} else {
 			// base template: die Vorlage liest diese Schlüssel auch ohne Dokument
 			// (sonst "Undefined array key" und ein leerer Upload-Hinweis "max. ")
-			$maxUploadFilesize = \OCP\Util::maxUploadFilesize("/");
 			$docRetVal = [
-				'uploadMaxFilesize' => $maxUploadFilesize,
-				'uploadMaxHumanFilesize' => \OCP\Util::humanFileSize($maxUploadFilesize),
 				'title' => '',
 				'fileId' => '',
 				'version' => '',
@@ -266,6 +263,15 @@ class DocumentController extends Controller {
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
 			return $this->wopiUrlError($wopiRemote);
+		}
+
+		if ($fileId === null) {
+			// Die Upload-Grenze fragt den freien Speicher im Dateisystem des
+			// Nutzers ab. Erst nach der Serverprüfung ermitteln: Die Fehlerseite
+			// braucht sie nicht, und ohne aufgebautes Dateisystem bräche sie ab.
+			$maxUploadFilesize = \OCP\Util::maxUploadFilesize("/");
+			$docRetVal['uploadMaxFilesize'] = $maxUploadFilesize;
+			$docRetVal['uploadMaxHumanFilesize'] = \OCP\Util::humanFileSize($maxUploadFilesize);
 		}
 
 		$retVal = \array_merge(

@@ -23,6 +23,9 @@ Doppelvergabe von 4.3.5 (redesign 07.09. mit anderem Inhalt als main 22.09.).
   Deprecation bei jedem Öffnen eines Dokuments.
 - **Office-Übersicht ohne Dokument:** fehlende Vorlagenschlüssel
   („Undefined array key“) und leerer Größenhinweis beim Hochladen („max. “).
+  Die Upload-Grenze wird erst nach der Prüfung der Serveradresse ermittelt:
+  Die Fehlerseite fragt den freien Speicher nicht mehr ab, und der Test dazu
+  hängt nicht mehr davon ab, dass ein früherer Test das Dateisystem aufbaut.
 - **Barrierefreiheit:** Schließen-Symbol und Revisionseinträge im
   Versionsverlauf sind per Tastatur erreichbar und reagieren auf Enter und
   Leertaste (`role="button"`, `tabindex="0"`).
