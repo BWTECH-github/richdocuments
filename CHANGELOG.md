@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 
+## [4.3.6] - 2026-09-24
+
+Rückportierung der Fehlerbehebungen aus der Redesign-Linie (5.0.x), soweit
+sie ohne den Redesign-Kern laufen. Die Nummer 4.3.6 beseitigt zugleich die
+Doppelvergabe von 4.3.5 (redesign 07.09. mit anderem Inhalt als main 22.09.).
+
+### Fixed
+
+- **HTTP 500 ohne eingerichteten Collabora-Server:** `wopi_url` und
+  `test_wopi_url` hatten keinen Standardwert; `DiscoveryService::getWopiUrl()`
+  (Rückgabetyp `string`) warf beim Öffnen der Office-App einen TypeError.
+  Jetzt Standard `''`, und ohne Adresse erscheint „Es ist kein Server
+  eingerichtet“ mit dem Hinweis auf die App-Einstellungen statt
+  „Ungültige URL“ mit leerer Adresse (Übersetzungen de, de_DE, de_CH).
+- **PHP 8.4:** `edit_groups` ohne Standardwert gab `explode()` null –
+  Deprecation bei jedem Öffnen eines Dokuments.
+- **Office-Übersicht ohne Dokument:** fehlende Vorlagenschlüssel
+  („Undefined array key“) und leerer Größenhinweis beim Hochladen („max. “).
+- **Barrierefreiheit:** Schließen-Symbol und Revisionseinträge im
+  Versionsverlauf sind per Tastatur erreichbar und reagieren auf Enter und
+  Leertaste (`role="button"`, `tabindex="0"`).
+- **Übersetzung:** Der Menüeintrag heißt auf Deutsch wieder „Office“ statt
+  „Büro“.
+
+### Changed
+
+- Verwaltung: Die Info-Verweise auf github.com/owncloud und
+  doc.owncloud.com sind entfernt (der Zotero-Verweis war wegen `ref=` statt
+  `href=` ohnehin tot).
+
+### Nicht übernommen
+
+- CSP-Freigabe `form-action` für den Editor und min-version 11.1 – nur im
+  Redesign-Kern nötig und möglich.
+- Fehlermeldung innerhalb der Oberfläche (`templates/error-inline.php`) –
+  setzt `#app-content-view` aus dem Redesign-Kern voraus.
+- Redesign-UI (Editor in der Schale, rollende Übersicht, „Speichern unter“).
+
 ## [4.3.5] - 2026-09-22
 
 ### Fixed
