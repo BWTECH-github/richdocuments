@@ -5,12 +5,7 @@ script('richdocuments', 'settings-admin');
 ?>
 <form id="richdocuments" class="section">
 
-	<h2 class="app-name has-documentation"><?php p($l->t('Collabora Online')) ?></h2>
-	<a target="_blank" rel="noreferrer" class="icon-info"
-        title="<?php p($l->t('Open documentation'));?>"
-        aria-label="<?php p($l->t('Open documentation'));?>"
-        href="https://github.com/owncloud/richdocuments/wiki">
-	</a>
+	<h2 class="app-name"><?php p($l->t('Collabora Online')) ?></h2>
 
 	<p style="max-width: 50em; color: #c00;"><?php if ($_['encryption_enabled'] === 'true' && $_['masterkey_encryption_enabled'] !== 'true') {
 		p($l->t("Enabled encryption type will result in limited functionality of the app. App requires privileged access to the files, and the only currently supported type is master key encryption."));
@@ -76,11 +71,7 @@ script('richdocuments', 'settings-admin');
 	<br/>
 	<br/>
 	
-	<h2 class="app-name has-documentation"><?php p($l->t('Secure View for Collabora Online')) ?></h2>
-	<a target="_blank" rel="noreferrer" class="icon-info"
-                title="<?php p($l->t('Open documentation'));?>"
-                aria-label="<?php p($l->t('Open documentation'));?>"
-                href="https://doc.owncloud.com/server/next/admin_manual/enterprise/collaboration/collabora_secure_view.html"></a>
+	<h2 class="app-name"><?php p($l->t('Secure View for Collabora Online')) ?></h2>
 
 	<br/>
 	<input type="checkbox" id="enable_secure_view_option_cb-richdocuments" <?php if ($_['secure_view_option'] === 'true') {
@@ -124,11 +115,7 @@ script('richdocuments', 'settings-admin');
 
 	<br/>
 	
-	<h2 class="app-name has-documentation"><?php p($l->t('Zotero for Collabora Online')) ?></h2>
-	<a target="_blank" rel="noreferrer" class="icon-info"
-                title="<?php p($l->t('Open documentation'));?>"
-                aria-label="<?php p($l->t('Open documentation'));?>"
-                ref="https://github.com/owncloud/richdocuments/wiki"></a>
+	<h2 class="app-name"><?php p($l->t('Zotero for Collabora Online')) ?></h2>
 
 	<br/>
 	<em><?php p($l->t("Connect Zotero for Bibliography and Citation inside Collabora Online.")); ?><a href="https://www.collaboraoffice.com/collabora-online-22-05-release-notes/" target="_blank"> <?php p($l->t("Collabora Online 22.05.10 and above required")); ?> </a></em>
