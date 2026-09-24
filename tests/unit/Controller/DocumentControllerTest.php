@@ -173,4 +173,31 @@ class DocumentControllerTest extends \Test\TestCase {
 			["filename with / slash"]
 		];
 	}
+
+	public function wopiUrlErrorProvider(): array {
+		return [
+			// kein Server eingerichtet: eigene Meldung statt "Ungültige URL"
+			['', 'Collabora Online: no server configured.'],
+			['   ', 'Collabora Online: no server configured.'],
+			// eingetragen, aber unbrauchbar: die bisherige Meldung bleibt
+			['office.example', 'Collabora Online: Invalid URL "%s".'],
+		];
+	}
+
+	/**
+	 * Office-Übersicht ohne (brauchbaren) Collabora-Server: eine Meldung statt
+	 * eines Fehlers.
+	 *
+	 * @dataProvider wopiUrlErrorProvider
+	 */
+	public function testIndexWithUnusableWopiUrlShowsError(string $wopiUrl, string $expectedError) {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->discoveryService->method('getWopiUrl')->willReturn($wopiUrl);
+
+		$response = $this->documentController->index(null, '/');
+
+		$this->assertInstanceOf(\OCP\AppFramework\Http\TemplateResponse::class, $response);
+		$this->assertSame('error', $response->getTemplateName());
+		$this->assertSame($expectedError, $response->getParams()['errors'][0]['error']);
+	}
 }

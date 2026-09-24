@@ -30,6 +30,12 @@ class AppConfig {
 		'watermark_text' => '',
 		'test_server_groups' => '',
 		'canonical_webroot' => '',
+		// Ohne Standard liefert getAppValue() hier null. DiscoveryService::getWopiUrl()
+		// ist mit ": string" deklariert und brach damit auf einer Instanz ohne
+		// eingerichteten Collabora-Server mit einem TypeError ab (HTTP 500) - statt
+		// die vorgesehene Meldung anzuzeigen.
+		'wopi_url' => '',
+		'test_wopi_url' => '',
 	];
 
 	private $config;

@@ -252,7 +252,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote);
 		}
 
 		$retVal = \array_merge(
@@ -331,7 +331,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote);
 		}
 
 		// FIXME: In public links allow max 100MB
@@ -421,7 +421,7 @@ class DocumentController extends Controller {
 		$wopiRemote = $this->discoveryService->getWopiUrl();
 		$webSocket = $this->parseWopiSocket($wopiRemote);
 		if (!$webSocket) {
-			return $this->responseError($this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]), $this->l10n->t('Please ask your administrator to check the Collabora Online server setting.'));
+			return $this->wopiUrlError($wopiRemote);
 		}
 
 		// FIXME: In federated shares allow max 100MB
@@ -529,6 +529,27 @@ class DocumentController extends Controller {
 	 */
 	private function getLocale() : string {
 		return \strtolower(\str_replace('_', '-', $this->settings->getUserValue($this->getCurrentUserUID(), 'core', 'lang', 'en')));
+	}
+
+	/**
+	 * Meldung für eine unbrauchbare Serveradresse. Ohne eingerichteten Server
+	 * ist die Adresse leer, und die Auskunft zur ungültigen Adresse war dafür
+	 * falsch: es ist nichts falsch eingetragen, sondern noch nichts eingetragen.
+	 *
+	 * @param string $wopiRemote
+	 * @return TemplateResponse
+	 */
+	private function wopiUrlError(string $wopiRemote) {
+		if (\trim($wopiRemote) === '') {
+			return $this->responseError(
+				$this->l10n->t('Collabora Online: no server configured.'),
+				$this->l10n->t('Please ask your administrator to enter the address of the Collabora Online server in the app settings.')
+			);
+		}
+		return $this->responseError(
+			$this->l10n->t('Collabora Online: Invalid URL "%s".', [$wopiRemote]),
+			$this->l10n->t('Please ask your administrator to check the Collabora Online server setting.')
+		);
 	}
 
 	/**

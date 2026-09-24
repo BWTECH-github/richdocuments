@@ -43,6 +43,8 @@ OC.L10N.register(
     "Please contact the administrator." : "Bitte die Administration kontaktieren.",
     "Collabora Online: Invalid URL \"%s\"." : "Collabora Online: Ungültige URL \"%s\".",
     "Please ask your administrator to check the Collabora Online server setting." : "Bitte kontaktieren Sie Ihren Administrator und bitten Sie um die Prüfung der Collabora Online Servereinstellungen.",
+    "Collabora Online: no server configured." : "Collabora Online: Es ist kein Server eingerichtet.",
+    "Please ask your administrator to enter the address of the Collabora Online server in the app settings." : "Bitte wenden Sie sich an Ihren Administrator: In den Einstellungen der App muss die Adresse des Collabora-Online-Servers eingetragen werden.",
     "New Document.odt" : "Neues Dokument.odt",
     "New Spreadsheet.ods" : "Neue Kalkulationstabelle.ods",
     "New Presentation.odp" : "Neue Präsentation.odp",
