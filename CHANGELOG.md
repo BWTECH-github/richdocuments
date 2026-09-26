@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 
+## [4.3.7] - 2026-09-26
+
+### Fixed
+
+- **Umzug aus ownCloud 10: Föderations-Freigabeliste passt wieder wie in
+  4.2.3.** richdocuments 4.2.3, die letzte Fassung für ownCloud 10, verglich
+  `richdocuments.federation_allowlist` nur mit dem Hostnamen der Gegenstelle.
+  Seit 4.3 wird die ganze Adresse ohne Schema verglichen; ein übernommener
+  Eintrag `partner.example` passte deshalb nicht mehr, sobald die Gegenstelle
+  unter einem Pfad (`https://partner.example/owncloud`) oder einem Port
+  (`https://partner.example:8443`) lief. Föderiertes Bearbeiten, das vor dem
+  Umzug ging, wurde danach abgelehnt, nur mit einer info-Meldung im Log.
+
+  Ein Eintrag passt jetzt exakt auf die Adresse ohne Schema (Schreibweise ab
+  4.3, auch mit Port oder Pfad) **oder** als reiner Hostname auf jede Adresse
+  dieses Hosts. Für den Hostvergleich muss der Host laut `parse_url()` und am
+  Anfang der Adresse übereinstimmen; Benutzerangaben
+  (`partner.example:8443@evil.example`), Fragmente und Abfragen öffnen so
+  keinen Umweg auf einen fremden Host. Ein reiner Hosteintrag erlaubt damit –
+  wie in 4.2.3 – jeden Port und Pfad dieses Hosts; wer das enger will, trägt
+  `host:port` bzw. `host/pfad` ein.
+
 ## [4.3.6] - 2026-09-24
 
 Rückportierung der Fehlerbehebungen aus der Redesign-Linie (5.0.x), soweit
