@@ -186,4 +186,67 @@ class DocumentControllerTest extends \Test\TestCase {
 			["filename with / slash"]
 		];
 	}
+
+	public function wopiUrlErrorProvider(): array {
+		return [
+			// kein Server eingerichtet: eigene Meldung statt "Ungültige URL"
+			['', 'Collabora Online: no server configured.'],
+			['   ', 'Collabora Online: no server configured.'],
+			// eingetragen, aber unbrauchbar: die bisherige Meldung bleibt
+			['office.example', 'Collabora Online: Invalid URL "%s".'],
+		];
+	}
+
+	/**
+	 * Office-Übersicht ohne (brauchbaren) Collabora-Server: eine Meldung statt
+	 * eines Fehlers. Im Redesign erscheint sie innerhalb der Oberfläche
+	 * (Vorlage error-inline, renderAs 'user'), nicht als eigenständige Seite.
+	 *
+	 * @dataProvider wopiUrlErrorProvider
+	 */
+	public function testIndexWithUnusableWopiUrlShowsError(string $wopiUrl, string $expectedError) {
+		$this->l10n->method('t')->willReturnArgument(0);
+		$this->discoveryService->method('getWopiUrl')->willReturn($wopiUrl);
+
+		$response = $this->documentController->index(null, '/');
+
+		$this->assertInstanceOf(\OCP\AppFramework\Http\TemplateResponse::class, $response);
+		$this->assertSame('error-inline', $response->getTemplateName());
+		$this->assertSame('user', $response->getRenderAs());
+		$this->assertSame($expectedError, $response->getParams()['errors'][0]['error']);
+	}
+
+	/**
+	 * Office-Übersicht ohne Dokument: die Vorlage liest die Dokumentschlüssel
+	 * trotzdem (sonst "Undefined array key" und ein leerer Upload-Hinweis).
+	 */
+	public function testIndexWithoutDocumentProvidesTemplateKeys() {
+		// Der Kern richtet das Dateisystem vor jedem Web-Aufruf ein
+		// (OC_Util::setupFS in base.php); der Größenhinweis braucht es.
+		$uid = 'richdocuments-overview-test';
+		$userManager = \OC::$server->getUserManager();
+		$user = $userManager->get($uid) ?? $userManager->createUser($uid, 'Overview-Test-2026!');
+		if (!$user instanceof \OCP\IUser) {
+			// createUser() liefert false (Kennwortregel, schreibgeschütztes
+			// Backend): dann klar scheitern statt später mit "delete() on bool"
+			$this->fail("Testnutzer '$uid' konnte nicht angelegt werden");
+		}
+		self::loginAsUser($uid);
+		try {
+			$this->discoveryService->method('getWopiUrl')->willReturn('https://office.example:9980');
+
+			$response = $this->documentController->index(null, '/');
+
+			$this->assertInstanceOf(\OCP\AppFramework\Http\TemplateResponse::class, $response);
+			$this->assertSame('documents', $response->getTemplateName());
+			$params = $response->getParams();
+			foreach (['title', 'fileId', 'version', 'sessionId', 'access_token', 'access_token_ttl', 'urlsrc', 'path', 'uploadMaxHumanFilesize'] as $key) {
+				$this->assertArrayHasKey($key, $params);
+			}
+			$this->assertNotSame('', $params['uploadMaxHumanFilesize']);
+		} finally {
+			self::logout();
+			$user->delete();
+		}
+	}
 }

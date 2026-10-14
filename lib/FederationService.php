@@ -142,11 +142,22 @@ class FederationService {
 	 * reine Domainnamen ohne Schema. Ist sie leer oder nicht gesetzt, ist
 	 * keine Foederation erlaubt - abgelehnt wird im Zweifel, nicht zugelassen.
 	 *
-	 * Bekannte Grenze: Installationen unter einem Pfad
-	 * (cloud.example.com/owncloud) werden nicht unterstuetzt; der Pfadanteil
-	 * verhindert die Uebereinstimmung mit einem reinen Domaineintrag.
+	 * Ein Eintrag passt auf zwei Arten:
+	 * - exakt auf die Adresse ohne Schema, also auch mit Port oder Pfad
+	 *   ("cloud.example.com:8443", "cloud.example.com/owncloud") - so
+	 *   vergleicht owncloud/richdocuments ab 4.3;
+	 * - als reiner Hostname auf jede Adresse dieses Hosts, gleich mit
+	 *   welchem Port oder Pfad - so verglich 4.2.3, die letzte Fassung für
+	 *   ownCloud 10. Kunden ziehen mit ihrer config.php-Liste um; ein Eintrag
+	 *   "partner.example" für eine Gegenstelle unter
+	 *   "https://partner.example/owncloud" muss danach weiter passen.
 	 *
-	 * Uebernommen aus owncloud/richdocuments.
+	 * Für den Hostvergleich muss der Host sowohl laut parse_url() als auch
+	 * am Anfang der Adresse stehen. So öffnen Benutzerangaben
+	 * ("partner.example:8443@evil.example") oder Fragmente keinen Umweg auf
+	 * einen fremden Host, auch wenn Parser sich in Randfällen uneins sind.
+	 *
+	 * Übernommen aus owncloud/richdocuments.
 	 *
 	 * @param string $remote a remote url
 	 * @return bool
@@ -158,10 +169,20 @@ class FederationService {
 			return false;
 		}
 
-		$domain = \rtrim((string)\preg_replace('|^https?://|', '', (string)$remote), '/');
+		$remote = (string)$remote;
+		$domain = \rtrim((string)\preg_replace('|^https?://|', '', $remote), '/');
+		$host = \parse_url($remote, PHP_URL_HOST);
 
 		foreach ($allowlist as $entry) {
-			if ($domain === \rtrim((string)$entry, '/')) {
+			$entry = \rtrim((string)$entry, '/');
+			if ($domain === $entry) {
+				return true;
+			}
+			// Reiner Hosteintrag wie in 4.2.3: Host stimmt, danach folgt
+			// nur noch Port oder Pfad.
+			if (\is_string($host) && $host !== '' && $host === $entry
+				&& \preg_match('#^' . \preg_quote($entry, '#') . '[:/]#', $domain) === 1
+			) {
 				return true;
 			}
 		}

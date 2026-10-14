@@ -81,6 +81,28 @@ class AppConfigTest extends TestCase {
 		$this->assertSame($expectedResult, $this->appConfig->enterpriseFeaturesEnabled());
 	}
 
+	public function wopiUrlKeyProvider(): array {
+		return [
+			['wopi_url'],
+			['test_wopi_url'],
+		];
+	}
+
+	/**
+	 * Ohne eingetragenen Collabora-Server muss hier ein leerer String ankommen,
+	 * kein null: DiscoveryService::getWopiUrl() ist mit ": string" deklariert.
+	 *
+	 * @dataProvider wopiUrlKeyProvider
+	 */
+	public function testWopiUrlDefaultsToEmptyString(string $key) {
+		$this->config->expects($this->once())
+			->method('getAppValue')
+			->with('richdocuments', $key, '')
+			->willReturnArgument(2);
+
+		$this->assertSame('', $this->appConfig->getAppValue($key));
+	}
+
 	/**
 	 * edit_groups wird an explode() gegeben; null wäre unter PHP 8.4 eine
 	 * Deprecation bei jedem Öffnen eines Dokuments.

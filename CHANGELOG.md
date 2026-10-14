@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [5.0.2] - 2026-10-14
+
+Übernahme von main (4.3.7).
+
+### Fixed
+
+- **Umzug von richdocuments 4.2.3 (letzte Fassung für den 10er-Kern):
+  Föderations-Freigabeliste passt wieder** (main 4.3.7). Ein Eintrag in
+  `richdocuments.federation_allowlist` passt exakt auf die Adresse ohne Schema
+  (auch mit Port oder Pfad) **oder** als reiner Hostname auf jede Adresse
+  dieses Hosts. Für den Hostvergleich muss der Host laut `parse_url()` und am
+  Anfang der Adresse übereinstimmen; Benutzerangaben
+  (`partner.example:8443@evil.example`), Fragmente und Abfragen öffnen keinen
+  Umweg auf einen fremden Host. Wer es enger will, trägt `host:port` bzw.
+  `host/pfad` ein.
+- **Office-Übersicht:** Die Upload-Grenze wird erst nach der Prüfung der
+  Serveradresse ermittelt (main 4.3.6). Die Meldung ohne eingerichteten Server
+  fragt den freien Speicher nicht mehr ab; der Test dazu hängt nicht mehr davon
+  ab, dass ein früherer Test das Dateisystem aufbaut, und das Anlegen des
+  Testnutzers ist abgesichert. Die Meldung erscheint im Redesign weiterhin
+  innerhalb der Oberfläche.
+- **Übersetzung de_DE:** Der Hinweis zum fehlenden Collabora-Server steht wie
+  die übrigen de_DE-Texte in der Sie-Form (main 4.3.6).
+- Tests: Standardwert `''` für `wopi_url` und `test_wopi_url` abgesichert
+  (main 4.3.6).
+
 ## [5.0.1] - 2026-09-23
 
 ### Fixed
@@ -51,6 +77,69 @@ Im Redesign-Kern mit echtem Collabora Online (CODE) Ende zu Ende geprüft
 
 - Verwaltung: Verweise auf fremde Dokumentation entfernt; tote Upstream-CI
   (SonarCloud, Transifex) entfernt; CHANGELOG-Verweise als "Upstream #N".
+
+## [4.3.7] - 2026-09-26
+
+### Fixed
+
+- **Umzug aus ownCloud 10: Föderations-Freigabeliste passt wieder wie in
+  4.2.3.** richdocuments 4.2.3, die letzte Fassung für ownCloud 10, verglich
+  `richdocuments.federation_allowlist` nur mit dem Hostnamen der Gegenstelle.
+  Seit 4.3 wird die ganze Adresse ohne Schema verglichen; ein übernommener
+  Eintrag `partner.example` passte deshalb nicht mehr, sobald die Gegenstelle
+  unter einem Pfad (`https://partner.example/owncloud`) oder einem Port
+  (`https://partner.example:8443`) lief. Föderiertes Bearbeiten, das vor dem
+  Umzug ging, wurde danach abgelehnt, nur mit einer info-Meldung im Log.
+
+  Ein Eintrag passt jetzt exakt auf die Adresse ohne Schema (Schreibweise ab
+  4.3, auch mit Port oder Pfad) **oder** als reiner Hostname auf jede Adresse
+  dieses Hosts. Für den Hostvergleich muss der Host laut `parse_url()` und am
+  Anfang der Adresse übereinstimmen; Benutzerangaben
+  (`partner.example:8443@evil.example`), Fragmente und Abfragen öffnen so
+  keinen Umweg auf einen fremden Host. Ein reiner Hosteintrag erlaubt damit –
+  wie in 4.2.3 – jeden Port und Pfad dieses Hosts; wer das enger will, trägt
+  `host:port` bzw. `host/pfad` ein.
+
+## [4.3.6] - 2026-09-24
+
+Rückportierung der Fehlerbehebungen aus der Redesign-Linie (5.0.x), soweit
+sie ohne den Redesign-Kern laufen. Die Nummer 4.3.6 beseitigt zugleich die
+Doppelvergabe von 4.3.5 (redesign 07.09. mit anderem Inhalt als main 22.09.).
+
+### Fixed
+
+- **HTTP 500 ohne eingerichteten Collabora-Server:** `wopi_url` und
+  `test_wopi_url` hatten keinen Standardwert; `DiscoveryService::getWopiUrl()`
+  (Rückgabetyp `string`) warf beim Öffnen der Office-App einen TypeError.
+  Jetzt Standard `''`, und ohne Adresse erscheint „Es ist kein Server
+  eingerichtet“ mit dem Hinweis auf die App-Einstellungen statt
+  „Ungültige URL“ mit leerer Adresse (Übersetzungen de, de_DE, de_CH).
+- **PHP 8.4:** `edit_groups` ohne Standardwert gab `explode()` null –
+  Deprecation bei jedem Öffnen eines Dokuments.
+- **Office-Übersicht ohne Dokument:** fehlende Vorlagenschlüssel
+  („Undefined array key“) und leerer Größenhinweis beim Hochladen („max. “).
+  Die Upload-Grenze wird erst nach der Prüfung der Serveradresse ermittelt:
+  Die Fehlerseite fragt den freien Speicher nicht mehr ab, und der Test dazu
+  hängt nicht mehr davon ab, dass ein früherer Test das Dateisystem aufbaut.
+- **Barrierefreiheit:** Schließen-Symbol und Revisionseinträge im
+  Versionsverlauf sind per Tastatur erreichbar und reagieren auf Enter und
+  Leertaste (`role="button"`, `tabindex="0"`).
+- **Übersetzung:** Der Menüeintrag heißt auf Deutsch wieder „Office“ statt
+  „Büro“.
+
+### Changed
+
+- Verwaltung: Die Info-Verweise auf github.com/owncloud und
+  doc.owncloud.com sind entfernt (der Zotero-Verweis war wegen `ref=` statt
+  `href=` ohnehin tot).
+
+### Nicht übernommen
+
+- CSP-Freigabe `form-action` für den Editor und min-version 11.1 – nur im
+  Redesign-Kern nötig und möglich.
+- Fehlermeldung innerhalb der Oberfläche (`templates/error-inline.php`) –
+  setzt `#app-content-view` aus dem Redesign-Kern voraus.
+- Redesign-UI (Editor in der Schale, rollende Übersicht, „Speichern unter“).
 
 ## [4.3.5] - 2026-09-22
 

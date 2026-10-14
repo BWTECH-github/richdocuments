@@ -198,4 +198,15 @@ class DiscoveryServiceTest extends TestCase {
 		$result = $this->discoveryService->getWopiSrc('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 		$this->assertEquals(null, $result);
 	}
+
+	/**
+	 * Fehlt die Serveradresse in der Konfiguration, darf getWopiUrl() keinen
+	 * TypeError werfen (vorher HTTP 500 beim Öffnen der Office-Übersicht).
+	 */
+	public function testGetWopiUrlWithoutConfiguredServerReturnsEmptyString() {
+		$this->appConfig->method('testUserSessionEnabled')->willReturn(false);
+		$this->appConfig->method('getAppValue')->with('wopi_url')->willReturn(null);
+
+		$this->assertSame('', $this->discoveryService->getWopiUrl());
+	}
 }

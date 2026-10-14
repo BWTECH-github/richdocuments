@@ -32,9 +32,8 @@ class AppConfig {
 		'canonical_webroot' => '',
 		// Ohne Standard liefert getAppValue() hier null. DiscoveryService::getWopiUrl()
 		// ist mit ": string" deklariert und brach damit auf einer Instanz ohne
-		// eingerichteten Collabora-Server mit einem TypeError ab - statt der
-		// vorgesehenen Meldung "Please ask your administrator to check the
-		// Collabora Online server setting".
+		// eingerichteten Collabora-Server mit einem TypeError ab (HTTP 500) - statt
+		// die vorgesehene Meldung anzuzeigen.
 		'wopi_url' => '',
 		'test_wopi_url' => '',
 		// Ohne Standard landete null in explode() (Deprecation bei jedem Öffnen

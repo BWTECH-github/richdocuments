@@ -64,7 +64,7 @@ class DiscoveryService {
 	 */
 	public function getWopiUrl(): string {
 		// Der Wert kommt aus der Konfiguration und kann dort fehlen; die Zusage
-		// dieser Methode ist aber "string". Die Aufrufer pruefen die Adresse
+		// dieser Methode ist aber "string". Die Aufrufer prüfen die Adresse
 		// ohnehin (parseWopiSocket) und zeigen dann die passende Meldung an.
 		if ($this->appConfig->testUserSessionEnabled()) {
 			return (string)$this->appConfig->getAppValue('test_wopi_url');

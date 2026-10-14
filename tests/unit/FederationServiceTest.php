@@ -104,6 +104,27 @@ class FederationServiceTest extends TestCase {
 			'listed domain as a suffix' => [['remote.example.test'], 'https://evil.test/remote.example.test', false],
 			'userinfo pointing elsewhere' => [['remote.example.test'], 'https://remote.example.test@evil.test', false],
 			'empty remote' => [['remote.example.test'], '', false],
+
+			// Umzug von ownCloud 10 (richdocuments 4.2.3): Dort wurde nur der
+			// Hostname der Gegenstelle mit der Liste verglichen. Ein
+			// übernommener reiner Hosteintrag muss deshalb weiter passen, wenn
+			// die Gegenstelle unter einem Pfad oder einem Port läuft.
+			'bare host entry, remote under a path' => [['remote.example.test'], 'https://remote.example.test/owncloud', true],
+			'bare host entry, remote with port' => [['remote.example.test'], 'https://remote.example.test:8443', true],
+			'bare host entry, remote with port and path' => [['remote.example.test'], 'https://remote.example.test:8443/owncloud/', true],
+			// Einträge mit Pfad oder Port (Schreibweise ab 4.3) gelten weiter exakt.
+			'entry with path, same path' => [['remote.example.test/owncloud'], 'https://remote.example.test/owncloud', true],
+			'entry with path, other path' => [['remote.example.test/owncloud'], 'https://remote.example.test/other', false],
+			'entry with port, other port' => [['remote.example.test:8443'], 'https://remote.example.test:9443', false],
+			// Die Lockerung darf keinen Umweg auf einen fremden Host öffnen.
+			'userinfo with port pointing elsewhere' => [['remote.example.test'], 'https://remote.example.test:8443@evil.test', false],
+			'userinfo pointing elsewhere, with path' => [['remote.example.test'], 'https://remote.example.test@evil.test/owncloud', false],
+			'backslash userinfo pointing elsewhere' => [['remote.example.test'], 'https://remote.example.test\\@evil.test/owncloud', false],
+			'listed host only in the fragment' => [['remote.example.test'], 'https://evil.test#@remote.example.test/', false],
+			'listed host only in the query' => [['remote.example.test'], 'https://evil.test/?x=@remote.example.test/', false],
+			'listed host followed by a fragment' => [['remote.example.test'], 'https://remote.example.test#@evil.test', false],
+			'listed host as a prefix, with port' => [['remote.example.test'], 'https://remote.example.test.evil.test:8443/owncloud', false],
+			'bare host entry, remote without scheme but with path' => [['remote.example.test'], 'remote.example.test/owncloud', false],
 		];
 	}
 
